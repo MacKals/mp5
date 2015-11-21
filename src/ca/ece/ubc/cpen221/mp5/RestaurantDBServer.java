@@ -8,14 +8,13 @@ public class RestaurantDBServer {
 	/**
 	 * Constructor
 	 * 
-	 * @param port
-	 * @param filename1
-	 * @param filename2
-	 * @param filename3
+	 * @param port the port number of the server
+	 * @param restaurantDetails JSON Format of the restaurant details
+	 * @param userReviews JSON Format of the user reviews
+	 * @param userDetails JSON Format of the user details
 	 */
-	public RestaurantDBServer(int port, String filename1, String filename2, String filename3) {
-		// TODO: See the problem statement for what the arguments are.
-		// TODO: Rename the arguments suitably.
+	public RestaurantDBServer(int port, String restaurantDetails, String userReviews, String userDetails) {
+		
 	}
 
 }

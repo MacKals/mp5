@@ -21,7 +21,7 @@ public class Restaurant {
     private boolean open;
 
     private String[] categories;
-    private String type;
+    //private String type; // all are "business"??
 
     private float stars;
     private int reviewCount;

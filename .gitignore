@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-/bin/
-=======
+
 *.class
 
 # Mobile Tools for Java (J2ME)
@@ -13,4 +11,4 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
->>>>>>> be440a484d81ab37d9a0b9bb8e63f671fa1a42f5
+

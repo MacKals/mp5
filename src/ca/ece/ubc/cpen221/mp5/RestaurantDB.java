@@ -25,10 +25,17 @@ public class RestaurantDB {
 	 * @param usersJSONfilename
 	 *            the filename for the users
 	 */
-	public RestaurantDB(String restaurantJSONfilename, String reviewsJSONfilename, String usersJSONfilename) {
-		// TODO: Implement this method
-	}
 
+	public RestaurantDB(String restaurantJSONfilename, String reviewsJSONfilename, String usersJSONfilename) {
+		
+	}
+	    
+	/** 
+	 * Takes a query  and searches the Restaurant Database for Restaurants that match the query.
+	 * @param queryString A query can be based on a combination of restaurant names, 
+	 * neighbourhood, categories, rating and price level
+	 * @return a set of Restaurants that fulfill the query.
+	 */
 	public Set<Restaurant> query(String queryString) {
 		// TODO: Implement this method
 		// Write specs, etc.

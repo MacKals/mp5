@@ -25,10 +25,23 @@ public class RestaurantDB {
 	 * @param usersJSONfilename
 	 *            the filename for the users
 	 */
+    
+    /**
+     * Constructs a database of Restaurants, given 
+     * 
+     * @param restaurantJSONfilename
+     * @param reviewsJSONfilename
+     * @param usersJSONfilename
+     */
 	public RestaurantDB(String restaurantJSONfilename, String reviewsJSONfilename, String usersJSONfilename) {
 		// TODO: Implement this method
 	}
-
+	
+	/**
+	 * 
+	 * @param queryString
+	 * @return
+	 */
 	public Set<Restaurant> query(String queryString) {
 		// TODO: Implement this method
 		// Write specs, etc.

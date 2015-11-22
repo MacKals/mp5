@@ -1,3 +1,5 @@
+package ca.ece.ubc.cpen221.mp5.antlr;
+
 // Generated from JSON.g4 by ANTLR 4.4
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

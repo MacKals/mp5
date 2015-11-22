@@ -16,5 +16,47 @@ public class RestaurantDBServer {
 	public RestaurantDBServer(int port, String restaurantDetails, String userReviews, String userDetails) {
 		
 	}
-
+	
+	/**
+	 * To this request, the server should respond by providing a random review (in JSON format) for the 
+	 * restaurant that matches the provided name. If more than one restaurant matches the name then any 
+	 * restaurant that satisfies the match can be selected.
+	 * @param restaurantName
+	 */
+	public String randomReview(String restaurantName){
+	    return " ";
+	}
+	
+	/**
+	 * the server responds with the restaurant details in JSON format
+	 * for the restaurant that has the provided business identifier.
+	 * @param businessID
+	 */
+	public String getRestaurant(String businessID){
+	    return " ";
+	}
+	
+	/**
+	 *  The server adds a new restaurant to the database if it 
+	 *  does not exist already.
+	 */
+	public void addRestaurant(){
+	    
+	}
+	
+	/**
+	 * 
+	 * @param userDetails
+	 */
+	public void addUser(String userDetails){
+	    
+	}
+	
+	/**
+	 * 
+	 * @param reviewDetails
+	 */
+	public void addReview(String reviewDetails){
+	    
+	}
 }

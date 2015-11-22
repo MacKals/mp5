@@ -27,8 +27,4 @@ public class Restaurant {
     private int reviewCount;
     private int price;
     
-    public Restaurant(){
-        
-    }
-
 }

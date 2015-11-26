@@ -17,6 +17,10 @@ import java.util.Set;
 
 public class RestaurantDB {
 
+    public ArrayList<Object> restaurants;
+    public ArrayList<Object> reviews;
+    public ArrayList<Object> users;
+    
     /**
      * Create a database from the Yelp dataset given the names of three files:
      * <ul>
@@ -36,12 +40,10 @@ public class RestaurantDB {
      */
     public RestaurantDB(String restaurantJSONfilename, String reviewsJSONfilename, String usersJSONfilename) {
 
-        ArrayList<Object> restaurants = addFromFile(restaurantJSONfilename, true, false, false);
-        ArrayList<Object> reviews =     addFromFile(reviewsJSONfilename, false, true, false);
-        ArrayList<Object> users =       addFromFile(usersJSONfilename, false, false, true);
-        
-        
-        
+        restaurants = addFromFile(restaurantJSONfilename, true, false, false);
+        reviews =     addFromFile(reviewsJSONfilename, false, true, false);
+        users =       addFromFile(usersJSONfilename, false, false, true);
+              
     }
 
     public Set<Restaurant> query(String queryString) {
@@ -96,7 +98,8 @@ public class RestaurantDB {
                                                   (String) review.get("review_id"),
                                                   (String) review.get("text"),
                                                   (float) review.get("stars"),
-                                                  (String)review.get("date"));
+                                                  (String)review.get("date")
+                                                  );
                     
                     returnList.add(newReview);
                         
@@ -109,12 +112,12 @@ public class RestaurantDB {
                     JSONObject user = (JSONObject) o;
                     
                     Object newUser = new User( (String) user.get("url"),
-                                               (int[]) user.get("votes"),
+                                               (int[]) user.get("votes"), //PROBLEMS WILL ARISE HERE.
                                                (int) user.get("review_count"),
                                                (String) user.get("user_id"),
                                                (String) user.get("name"),
                                                (double) user.get("average_stars")
-                                                );
+                                               );
                     
                     returnList.add(newUser);
                         
@@ -124,11 +127,11 @@ public class RestaurantDB {
             
             
         } catch (ParseException e) {
-
+            e.printStackTrace();
         } catch (FileNotFoundException p){
-            
+            p.printStackTrace();
         } catch (IOException s){
-            
+            s.printStackTrace();
         }
         
         return returnList;

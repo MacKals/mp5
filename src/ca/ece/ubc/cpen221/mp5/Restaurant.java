@@ -51,6 +51,12 @@ public class Restaurant {
         
         
     }
+    
+    public double getLocation(boolean latitude){
+        if (latitude) return this.latitude;
+        return this.longitude;
+    }
+    
     @Override
     public boolean equals(Object object) {
         

@@ -22,4 +22,22 @@ public class Review {
                     String date){
             
      }
+     
+     @Override
+     public boolean equals(Object object) {
+         
+         if (object instanceof Review) {
+             if ( this.reviewID == ((Review) object).reviewID ) {
+                 return true;
+             }
+         }
+         
+         return false;
+     }
+     
+     @Override 
+     public int hashCode() {
+         return this.reviewID.hashCode();
+     }
+     
 }

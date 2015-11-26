@@ -19,4 +19,22 @@ public class User {
                  double averageStars){
         
     }
+    
+    @Override
+    public boolean equals(Object object) {
+        
+        if (object instanceof User) {
+            if ( this.userID == ((User) object).userID ) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    @Override 
+    public int hashCode() {
+        return this.userID.hashCode();
+    }
+ 
 }

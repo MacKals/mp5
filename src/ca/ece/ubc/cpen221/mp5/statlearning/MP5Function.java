@@ -13,4 +13,5 @@ public interface MP5Function {
 	 */
 	public double f(Restaurant yelpRestaurant, RestaurantDB db);
 	
+	
 }

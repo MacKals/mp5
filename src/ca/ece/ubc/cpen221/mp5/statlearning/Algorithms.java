@@ -18,7 +18,6 @@ public class Algorithms {
 		return null;
 	}
 	
-	test
 
 	public static String convertClustersToJSON(List<Set<Restaurant>> clusters) {
 		// TODO: Implement this method

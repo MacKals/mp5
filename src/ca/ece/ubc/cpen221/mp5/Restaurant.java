@@ -26,4 +26,21 @@ public class Restaurant {
     private float stars;
     private int reviewCount;
     private int price;
+    
+    @Override
+    public boolean equals(Object object) {
+        
+        if (object instanceof Restaurant) {
+            if ( this.businessID == ((Restaurant) object).businessID ) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    @Override 
+    public int hashCode() {
+        return this.businessID.hashCode();
+    }
 }

@@ -40,24 +40,24 @@ public class RestaurantDBServer {
      *  The server adds a new restaurant to the database if it 
      *  does not exist already.
      */
-    public void addRestaurant(){
-        
+    public boolean addRestaurant(){
+        return false;
     }
     
     /**
      * 
      * @param userDetails
      */
-    public void addUser(String userDetails){
-        
+    public boolean addUser(String userDetails){
+        return false;
     }
     
     /**
      * 
      * @param reviewDetails
      */
-    public void addReview(String reviewDetails){
-        
+    public boolean addReview(String reviewDetails){
+        return false;
     }
 	
 }

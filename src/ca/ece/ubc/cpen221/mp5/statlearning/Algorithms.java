@@ -14,17 +14,16 @@ public class Algorithms {
 	 * @param db
 	 * @return
 	 */
-	public static List<Set<Restaurant>> kMeansClustering(int k, RestaurantDB db) {
+	public static List<Set<Restaurant>> kMeansClustering(int k, RestaurantDB db ) {
 	    
 		List<Set<Restaurant>> allClusters = new ArrayList<Set<Restaurant>>();
-		
-		
+				
 		double maxLongitude = 0;
 		double minLongitude = 0;
 		double minLatitude = 0;
 		double maxLatitude = 0;
 		
-		for (Object restaurant : db.restaurants){ //add all restaurants to a list. Attain min and max latitudes/longitudes.
+		for (Object restaurant : db.getRestaurantList()){ //add all restaurants to a list. Attain min and max latitudes/longitudes.
 		    
 		    if (restaurant instanceof Restaurant){
 		        
@@ -36,15 +35,14 @@ public class Algorithms {
 		        
 		        if (((Restaurant) restaurant).getLocation(false) > maxLongitude) maxLongitude = ((Restaurant) restaurant).getLocation(false);
 		        
-		        
-		        
-		        
-		               
+		              
 		    }
-		    
-		    
-		    
-		    
+		    	    
+		}
+		
+		// initialize the k nodes at "random" positions
+		for (int i = 0; i < k; i++){
+		    Math.random();
 		}
 				
 		return allClusters;

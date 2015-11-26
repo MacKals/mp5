@@ -17,9 +17,9 @@ import java.util.Set;
 
 public class RestaurantDB {
 
-    public ArrayList<Object> restaurants;
-    public ArrayList<Object> reviews;
-    public ArrayList<Object> users;
+    private ArrayList<Object> restaurants;
+    private ArrayList<Object> reviews;
+    private ArrayList<Object> users;
     
     /**
      * Create a database from the Yelp dataset given the names of three files:
@@ -44,6 +44,18 @@ public class RestaurantDB {
         reviews =     addFromFile(reviewsJSONfilename, false, true, false);
         users =       addFromFile(usersJSONfilename, false, false, true);
               
+    }
+    
+    public ArrayList<Object> getRestaurantList(){ // Perhaps make a copy?
+        return this.restaurants;
+    }
+    
+    public ArrayList<Object> getReviewList(){// Perhaps make a copy?
+        return this.reviews;
+    }
+    
+    public ArrayList<Object> getUserList(){// Perhaps make a copy?
+        return this.users;
     }
 
     public Set<Restaurant> query(String queryString) {

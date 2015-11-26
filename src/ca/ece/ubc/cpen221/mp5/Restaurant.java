@@ -27,6 +27,30 @@ public class Restaurant {
     private int reviewCount;
     private int price;
     
+    public Restaurant ( String url,
+                        String photoURL,
+                        double longitude,
+                        double latitude,
+                        String city,
+                        String fullAddress,
+                        String[] neigbourhoods,
+                        String state,
+                        String[] schools,
+
+                        String name,
+                        String businessID,
+                        boolean open,
+
+                        String[] categories,
+
+                        float stars,
+                        int reviewCount,
+                        int price){
+        
+        
+        
+        
+    }
     @Override
     public boolean equals(Object object) {
         
@@ -43,4 +67,6 @@ public class Restaurant {
     public int hashCode() {
         return this.businessID.hashCode();
     }
+    
+    
 }

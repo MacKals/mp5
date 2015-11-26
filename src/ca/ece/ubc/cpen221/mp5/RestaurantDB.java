@@ -4,6 +4,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONArray;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Set;
 
 // TODO: This class represents the Restaurant Database.
@@ -30,7 +35,13 @@ public class RestaurantDB {
      *            the filename for the users
      */
     public RestaurantDB(String restaurantJSONfilename, String reviewsJSONfilename, String usersJSONfilename) {
-        // TODO: Implement this method
+
+        ArrayList<Object> restaurants = addFromFile(restaurantJSONfilename, true, false, false);
+        ArrayList<Object> reviews =     addFromFile(reviewsJSONfilename, false, true, false);
+        ArrayList<Object> users =       addFromFile(usersJSONfilename, false, false, true);
+        
+        
+        
     }
 
     public Set<Restaurant> query(String queryString) {
@@ -39,38 +50,88 @@ public class RestaurantDB {
         return null;
     }
 
-    private void parser() {
+    private ArrayList<Object> addFromFile(String filename, boolean isRestaurant, boolean isReview, boolean isUser) {
 
         JSONParser parser = new JSONParser();
+        ArrayList<Object> returnList = new ArrayList<Object>();
         
         try {
-
-            String s = "[0,{\"1\":{\"2\":{\"3\":{\"4\":[5,{\"6\":7}]}}}}]";
-            Object obj = parser.parse(s);
-            JSONArray array = (JSONArray) obj;
-            System.out.println("======the 2nd element of array======");
-            System.out.println(array.get(1));
-            System.out.println();
-
-            JSONObject obj2 = (JSONObject) array.get(1);
-            System.out.println("======field \"1\"==========");
-            System.out.println(obj2.get("1"));
-
-            s = "{}";
-            obj = parser.parse(s);
-            System.out.println(obj);
-
-            s = "[5,]";
-            obj = parser.parse(s);
-            System.out.println(obj);
-
-            s = "[5,,2]";
-            obj = parser.parse(s);
-            System.out.println(obj);
+            JSONArray a = (JSONArray) parser.parse(new FileReader("data/" + filename)); // NOT SURE if file extension will be included??
+            
+            if (isRestaurant){
+                
+                for (Object o : a ){
+                    
+                    JSONObject restaurant = (JSONObject) o;
+                    
+                    Object newRestaurant = new Restaurant((String) restaurant.get("url"),
+                                                              (String) restaurant.get("photo_url"),
+                                                              (double) restaurant.get("longitude"),
+                                                              (double) restaurant.get("latitude"),
+                                                              (String)restaurant.get("city"),
+                                                              (String) restaurant.get("full_address"),
+                                                              (String[]) restaurant.get("neighborhoods"),
+                                                              (String) restaurant.get("state"),
+                                                              (String[]) restaurant.get("schools"),
+                                                              (String) restaurant.get("name"),
+                                                              (String) restaurant.get("business_id"),
+                                                              (boolean) restaurant.get("open"),
+                                                              (String[]) restaurant.get("categories"),
+                                                              (float) restaurant.get("stars"),
+                                                              (int) restaurant.get("review_count"),
+                                                              (int) restaurant.get("price")
+                                                              );
+                    returnList.add(newRestaurant);
+                        
+                }
+            } else if (isReview){
+                
+                for (Object o : a ){
+                    
+                    JSONObject review = (JSONObject) o;
+                    
+                    Object newReview = new Review((String) review.get("business_id"),
+                                                  (String) review.get("user_id"),
+                                                  (int[])  review.get("votes"), //PROBLEMS WILL ARISE HERE.
+                                                  (String) review.get("review_id"),
+                                                  (String) review.get("text"),
+                                                  (float) review.get("stars"),
+                                                  (String)review.get("date"));
+                    
+                    returnList.add(newReview);
+                        
+                }
+                
+            } else if (isUser){
+                
+                for (Object o : a ){
+                    
+                    JSONObject user = (JSONObject) o;
+                    
+                    Object newUser = new User( (String) user.get("url"),
+                                               (int[]) user.get("votes"),
+                                               (int) user.get("review_count"),
+                                               (String) user.get("user_id"),
+                                               (String) user.get("name"),
+                                               (double) user.get("average_stars")
+                                                );
+                    
+                    returnList.add(newUser);
+                        
+                }
+                
+            }
+            
             
         } catch (ParseException e) {
 
+        } catch (FileNotFoundException p){
+            
+        } catch (IOException s){
+            
         }
+        
+        return returnList;
 
     }
 

@@ -43,8 +43,6 @@ public class Coordinate {
         }
         return false;
     }
-    
-    
-    
-    
+
+    //TODO: May be hashcode needs to be implemented..
 }

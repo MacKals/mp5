@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
@@ -21,16 +22,16 @@ public class QueryFactory {
     public static Query parse(String string) {
         // Create a stream of tokens using the lexer.
         CharStream stream = new ANTLRInputStream(string);
-        QueryFactory lexer = new QueryFactory(stream);
+        QueryLexer lexer = new QueryLexer(stream);
         lexer.reportErrorsAsExceptions();
         TokenStream tokens = new CommonTokenStream(lexer);
 
         // Feed the tokens into the parser.
-        QueryFactory parser = new QueryFactory(tokens);
+        QueryParser parser = new QueryParser(tokens);
         parser.reportErrorsAsExceptions();
 
         // Generate the parse tree using the starter rule.
-        ParseTree tree = parser.query(); // "root" is the starter rule.
+        ParseTree tree = parser.orExpression(); // "root" is the starter rule.
 
         // debugging option #1: print the tree to the console
         // System.err.println(tree.toStringTree(parser));
@@ -57,69 +58,69 @@ public class QueryFactory {
     }
 
     private static class QueryListener_QueryCreator extends QueryBaseListener {
+        
         private Stack<Query> stack = new Stack<Query>();
 
         @Override
-        public void exitLiteral(QueryParser.LiteralContext ctx) {
-            Query literal = new BooleanLiteral(ctx.start.getType() == QueryLexer.TRUE);
-            stack.push(literal);
-        }
-
-        @Override
-        public void exitConjunction(QueryParser.ConjunctionContext ctx) {
-            if (ctx.AND() != null) {
-                // we matched the AND rule
+        public void exitOrExpression(QueryParser.OrExpressionContext ctx) {
+            if (ctx.OR() != null) {
                 Query right = stack.pop();
                 Query left = stack.pop();
-                Query and = new And(left, right);
+                Query or = new NodeOr(right, left);
+                stack.push(or);
+            }
+        }
+        
+        @Override 
+        public void exitAndExpression(@NotNull QueryParser.AndExpressionContext ctx) { 
+            
+            if (ctx.AND() != null) {
+                Query right = stack.pop();
+                Query left = stack.pop();
+                Query and = new NodeAnd(right, left);
                 stack.push(and);
             }
         }
         
         @Override
-        public void exitTerm(QueryParser.TermContext ctx) {
-            if (ctx.NOT() != null) {
-                Query term = stack.pop();
-                Query not = new Not(term);
-                stack.push(not);
-            }
+        public void exitLocation(@NotNull QueryParser.LocationContext ctx) {
+            Query location = new NodeIn(ctx.STRING().getText());
+            stack.push(location);
         }
-        
-        @Override
-        public void exitQuery(QueryParser.QueryContext ctx) {
-            // do nothing, because the top of the stack should have the node
-            // already in it
-            assert stack.size() == 1;
+      
+        @Override 
+        public void exitName(@NotNull QueryParser.NameContext ctx) { 
+            Query name = new NodeName(ctx.STRING().getText());
+            stack.push(name);
+        }
+
+        @Override 
+        public void exitCategory(@NotNull QueryParser.CategoryContext ctx) { 
+            Query category = new NodeCategory(ctx.STRING().getText());
+            stack.push(category);
+        }
+
+        @Override 
+        public void exitRating(@NotNull QueryParser.RatingContext ctx) {
+            String start = ctx.range().START().getText();
+            String end = ctx.range().END().getText();
+
+            Query price = new NodePrice(Integer.parseInt(start), Integer.parseInt(end));
+            stack.push(price);
+        }
+
+        @Override 
+        public void exitPrice(@NotNull QueryParser.PriceContext ctx) {
+            
+            String start = ctx.range().START().getText();
+            String end = ctx.range().END().getText();
+
+            Query price = new NodePrice(Integer.parseInt(start), Integer.parseInt(end));
+            stack.push(price);
         }
 
         public Query getQuery() {
             return stack.get(0);
-        }
-    }
-
-    private static class QueryListener_PrintEverything extends QueryBaseListener {
-        public void enterQuery(QueryParser.QueryContext ctx) {
-            System.err.println("entering query " + ctx.getText());
-        }
-
-        public void exitQuery(QueryParser.QueryContext ctx) {
-            System.err.println("exiting query " + ctx.getText());
-        }
-
-        public void enterConjunction(QueryParser.ConjunctionContext ctx) {
-            System.err.println("entering conjunction " + ctx.getText());
-        }
-
-        public void exitConjunction(QueryParser.ConjunctionContext ctx) {
-            System.err.println("exiting conjunction " + ctx.getText());
-        }
-
-        public void enterLiteral(QueryParser.LiteralContext ctx) {
-            System.err.println("entering literal " + ctx.getText());
-        }
-
-        public void exitLiteral(QueryParser.LiteralContext ctx) {
-            System.err.println("exiting literal " + ctx.getText());
         }
     }
 }

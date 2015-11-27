@@ -2,7 +2,7 @@ grammar Query;
 
 // This puts "package formula;" at the top of the output Java files.
 @header {
-package query;
+package ca.ece.ubc.cpen221.mp5.query;
 }
 
 // This adds code to the generated lexer and parser. Do not change these lines.
@@ -25,24 +25,28 @@ package query;
     }
 }
 
-query: andExpression (OR andExpression)* ;
-andExpression: atom (AND atom)* ;
+orExpression: 	andExpression (OR andExpression)* ;
+andExpression: 	atom (AND atom)* ;
 
-atom: 		in | category | name | rating | price;
+atom: 		location | location | name | rating | price;
 
-in: 		'in' parenExpression;
-category: 	'category' parenExpression;
-name: 		'name' parenExpression;
-rating: 	'rating' parenExpression;
-price: 		'price' parenExpression; 
+location: 	'in' 		LP STRING RP;
+category: 	'category' 	LP STRING RP;
+name: 		'name' 		LP STRING RP;
+rating: 	'rating' 	LP range RP;
+price: 		'price' 	LP range RP; 
 
-parenExpression: '(' (RANGE | ('"' STRING '"') ) ')';
+range: 		START '..' END;
 
-RANGE: 		[1-5] '..' [1-5];
+START:		[1-5] ;
+END:		[1-5] ;
 STRING: 	~[<>]+ ;
 
 OR: 	'||';
 AND:	'&&';
+
+LP: 	'(';
+RP: 	')';
 
 WHITESPACE: [ \t\r\n]+ -> skip ;
 

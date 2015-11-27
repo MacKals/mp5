@@ -10,8 +10,6 @@ public class Restaurant {
     private String url;
     private String photoURL;
 
-//    private double longitude;
-//    private double latitude;
     private String city;
     private String fullAddress;
     private String[] neighbourhoods;
@@ -72,6 +70,26 @@ public class Restaurant {
       
     }
     
+    private Restaurant(Restaurant old) {
+        this.city = old.city;
+        this.fullAddress = old.fullAddress;
+        this.neighbourhoods = old.neighbourhoods;
+        this.state = old.state;
+        this.schools = old.schools;
+
+        this.name = old.name;
+        this.businessID = old.businessID;
+        this.open = old.open;
+
+        this.categories = old.categories;
+
+        this.stars = old.stars;
+        this.reviewCount = old.reviewCount;
+        this.price = old.price;
+        
+        this.coordinate = old.coordinate;
+    }
+    
     public Coordinate getLocation(){
         return this.coordinate;
     }
@@ -87,6 +105,15 @@ public class Restaurant {
     public String getLocationName() {
         return city + fullAddress + neigbourhoods + state; // returns strings matching names describing location, for NodeIn
     }
+
+    public double getStars() {
+        return stars;
+    }
+    
+    public Restaurant copy() {
+        return new Restaurant(this);
+    }
+  
     
     @Override
     public boolean equals(Object object) {
@@ -104,17 +131,4 @@ public class Restaurant {
     public int hashCode() {
         return this.businessID.hashCode();
     }
-    
-    public double getStars() {
-        return stars;
-    }
-    
-    public Restaurant copy() {
-        return new Restaurant(this);
-    }
-    
-    private Restaurant(Restaurant old) {
-        //TODO: copy all fields
-    }
-    
 }

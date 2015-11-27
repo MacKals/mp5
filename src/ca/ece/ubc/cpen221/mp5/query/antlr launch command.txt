@@ -1,1 +1,1 @@
-Antlr launch command: java -jar antlr-4.4-complete.jar Queries.g4
+Antlr launch command: java -jar antlr-4.4-complete.jar Query.g4

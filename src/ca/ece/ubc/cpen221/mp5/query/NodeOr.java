@@ -3,13 +3,20 @@ package ca.ece.ubc.cpen221.mp5.query;
 import java.util.Set;
 
 import ca.ece.ubc.cpen221.mp5.Restaurant;
+import ca.ece.ubc.cpen221.mp5.RestaurantDB;
 
 public class NodeOr implements Query {
 
-    @Override
-    public Set<Restaurant> result() {
-        // TODO Auto-generated method stub
-        return null;
+    private Query firstNode;
+    private Query secondNode;
+    
+    public NodeOr(Query first, Query second) {
+        firstNode = first;
+        secondNode = second;
     }
-
+    
+    @Override
+    public Set<Restaurant> result(RestaurantDB db) {
+        return Sets.union(firstNode.result(db), secondNode.result(db));
+    }
 }

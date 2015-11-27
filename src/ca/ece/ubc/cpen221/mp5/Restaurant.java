@@ -76,6 +76,18 @@ public class Restaurant {
         return this.coordinate;
     }
     
+    public int getPrice() {
+        return price;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public String getLocationName() {
+        return city + fullAddress + neigbourhoods + state; // returns strings matching names describing location, for NodeIn
+    }
+    
     @Override
     public boolean equals(Object object) {
         
@@ -93,5 +105,16 @@ public class Restaurant {
         return this.businessID.hashCode();
     }
     
+    public double getStars() {
+        return stars;
+    }
+    
+    public Restaurant copy() {
+        return new Restaurant(this);
+    }
+    
+    private Restaurant(Restaurant old) {
+        //TODO: copy all fields
+    }
     
 }

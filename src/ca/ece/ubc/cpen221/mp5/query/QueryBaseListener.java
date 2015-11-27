@@ -19,6 +19,18 @@ public class QueryBaseListener implements QueryListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterOrExpression(@NotNull QueryParser.OrExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOrExpression(@NotNull QueryParser.OrExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAndExpression(@NotNull QueryParser.AndExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -31,18 +43,6 @@ public class QueryBaseListener implements QueryListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIn(@NotNull QueryParser.InContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitIn(@NotNull QueryParser.InContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterPrice(@NotNull QueryParser.PriceContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -50,18 +50,6 @@ public class QueryBaseListener implements QueryListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrice(@NotNull QueryParser.PriceContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterQuery(@NotNull QueryParser.QueryContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitQuery(@NotNull QueryParser.QueryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -91,13 +79,25 @@ public class QueryBaseListener implements QueryListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParenExpression(@NotNull QueryParser.ParenExpressionContext ctx) { }
+	@Override public void enterRange(@NotNull QueryParser.RangeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParenExpression(@NotNull QueryParser.ParenExpressionContext ctx) { }
+	@Override public void exitRange(@NotNull QueryParser.RangeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLocation(@NotNull QueryParser.LocationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLocation(@NotNull QueryParser.LocationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

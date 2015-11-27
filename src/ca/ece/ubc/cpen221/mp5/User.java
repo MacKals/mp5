@@ -3,6 +3,7 @@ package ca.ece.ubc.cpen221.mp5;
 // TODO: Use this class to represent a Yelp user.
 
 public class User {
+        
     private String url;
     private int[] votes;
     private int reviewCount;
@@ -18,6 +19,13 @@ public class User {
                  String name,
                  double averageStars){
         
+        this.url = url;
+        this.votes = votes;
+        this.reviewCount = reviewCount;
+        this.userID = userID;
+        this.name = name;
+        this.averageStars = averageStars;
+        
     }
     
     @Override
@@ -27,8 +35,7 @@ public class User {
             if ( this.userID == ((User) object).userID ) {
                 return true;
             }
-        }
-        
+        }       
         return false;
     }
     

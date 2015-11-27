@@ -20,6 +20,14 @@ public class Review {
                     String text,
                     float stars,
                     String date){
+         
+         this.businessID = businessID;
+         this.userID = userID;
+         this.votes = votes;
+         this.reviewID = reviewID;
+         this.text = text;
+         this.stars = stars;
+         this.date = date;
             
      }
      

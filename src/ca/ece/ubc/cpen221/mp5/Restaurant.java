@@ -85,7 +85,7 @@ public class Restaurant {
     }
     
     public String getLocationName() {
-        return city + fullAddress + neigbourhoods + state; // returns strings matching names describing location, for NodeIn
+        return city + fullAddress + neighbourhoods + state; // returns strings matching names describing location, for NodeIn
     }
     
     @Override

@@ -96,7 +96,7 @@ public class Algorithms {
 	}
 
 	public static MP5Function getPredictor(User u, RestaurantDB db, MP5Function featureFunction) {
-		// TODO: Implement this method
+		
 		return null;
 	}
 

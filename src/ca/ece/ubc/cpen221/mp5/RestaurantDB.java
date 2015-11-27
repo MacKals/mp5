@@ -43,9 +43,9 @@ public class RestaurantDB {
      */
     public RestaurantDB(String restaurantJSONfilename, String reviewsJSONfilename, String usersJSONfilename) {
 
-        restaurants = addFromFile(restaurantJSONfilename, true, false, false);
-        reviews = addFromFile(reviewsJSONfilename, false, true, false);
-        users = addFromFile(usersJSONfilename, false, false, true);
+        restaurants = addFromFile(restaurantJSONfilename, FileKind.Restaurant);
+        reviews = addFromFile(reviewsJSONfilename,FileKind.Review);
+        users = addFromFile(usersJSONfilename, FileKind.User);
 
     }
 
@@ -71,7 +71,10 @@ public class RestaurantDB {
         return QueryFactory.parse(queryString).result(this);
     }
 
-    private ArrayList<Object> addFromFile(String filename, boolean isRestaurant, boolean isReview, boolean isUser) {
+    public enum FileKind{
+        Restaurant, Review, User;
+    }
+    private ArrayList<Object> addFromFile(String filename, FileKind fileKind) {
 
         JSONParser parser = new JSONParser();
         ArrayList<Object> returnList = new ArrayList<Object>();
@@ -80,7 +83,7 @@ public class RestaurantDB {
             JSONArray a = (JSONArray) parser.parse(new FileReader("data/" + filename));
             // NOT SURE if file extension will be included??
 
-            if (isRestaurant) {
+            if (fileKind == FileKind.Restaurant) {
 
                 for (Object o : a) {
 
@@ -98,7 +101,8 @@ public class RestaurantDB {
                     returnList.add(newRestaurant);
 
                 }
-            } else if (isReview) {
+                
+            } else if (fileKind == FileKind.Review) {
 
                 for (Object o : a) {
 
@@ -114,7 +118,7 @@ public class RestaurantDB {
 
                 }
 
-            } else if (isUser) {
+            } else if (fileKind == FileKind.User) {
 
                 for (Object o : a) {
 

@@ -31,6 +31,17 @@ public class Review {
             
      }
      
+     public String getUserID(){
+         return this.userID;
+     }
+     
+     public float getStars(){
+         return this.stars;
+     }
+     public String getBusinessID(){
+         return this.businessID;
+     }
+     
      @Override
      public boolean equals(Object object) {
          

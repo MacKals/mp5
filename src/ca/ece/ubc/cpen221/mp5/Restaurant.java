@@ -95,11 +95,11 @@ public class Restaurant {
     }
     
     public int getPrice() {
-        return price;
+        return this.price;
     }
     
     public String getName() {
-        return name;
+        return this.name;
     }
     
     public String getLocationName() {
@@ -107,7 +107,11 @@ public class Restaurant {
     }
 
     public double getStars() {
-        return stars;
+        return this.stars;
+    }
+    
+    public String getBusinessID(){
+        return this.businessID;
     }
     
     public Restaurant copy() {

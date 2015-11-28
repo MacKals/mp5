@@ -28,6 +28,22 @@ public class User {
         
     }
     
+    public int getReviewCount(){
+        return this.reviewCount;
+    }
+    
+    public double getAvgStars(){
+        return this.averageStars;
+    }
+    
+    public String getUserName(){
+        return this.name;
+    }
+    
+    public String getUserID(){
+        return this.userID;
+    }
+    
     @Override
     public boolean equals(Object object) {
         

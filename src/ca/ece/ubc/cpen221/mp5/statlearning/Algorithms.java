@@ -96,6 +96,52 @@ public class Algorithms {
 	}
 
 	public static MP5Function getPredictor(User u, RestaurantDB db, MP5Function featureFunction) {
+	    
+	    double sumOfInput = 0;
+	    double sumOfOutput = 0;
+	    
+	    ArrayList<Double> inputs = new ArrayList<Double>();
+	    ArrayList<Double> outputs = new ArrayList<Double>();
+	    int numDataPairs = 0;
+	    double r_squared;
+	    double meanInput;
+	    double meanOutput;
+	    
+	    for (Object review : db.getReviewList()){ //loop through all reviews to find the review from a particular user
+	        
+	        if (review instanceof Review){
+	            
+	            if(((Review) review).getUserID().equals(u.getUserID())){ //this review was written by user U
+	                
+	                //find the associated restaurant
+	                for (Object restaurant : db.getRestaurantList()){
+	                    if (restaurant instanceof Restaurant && ((Restaurant) restaurant).getBusinessID().equals(((Review) review).getBusinessID())){
+	                        
+	                        sumOfInput += featureFunction.f((Restaurant) restaurant, db);
+	                        sumOfOutput += ((Review) review).getStars();
+	                        numDataPairs++;
+	                        break;
+	                        
+	                    }	                    
+	                }	                	                
+	            }   
+	        }    
+	    }
+	    
+	    meanInput = sumOfInput/numDataPairs;
+	    meanOutput = sumOfOutput/numDataPairs;
+	    
+	    double sxx = 0;
+	    double syy = 0;
+	    double sxy = 0;
+	    
+	    for (int i = 0; i < numDataPairs; i++ ){
+	        sxx += (inputs.get(i) - meanInput) * (inputs.get(i) - meanInput);
+	        syy += (outputs.get(i) - meanOutput) * (outputs.get(i) - meanOutput);
+	        sxy += (inputs.get(i) - meanInput) * (outputs.get(i) - meanOutput);
+	    }
+	   
+	    r_squared = (sxy * sxy)/(sxx * syy);
 		
 		return null;
 	}

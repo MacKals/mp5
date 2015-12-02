@@ -8,10 +8,12 @@ import ca.ece.ubc.cpen221.mp5.query.QueryFactory;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONArray;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Set;
 
 // TODO: This class represents the Restaurant Database.
@@ -75,78 +77,144 @@ public class RestaurantDB {
         Restaurant, Review, User;
     }
     private ArrayList<Object> addFromFile(String filename, FileKind fileKind) {
-
-        JSONParser parser = new JSONParser();
+        
         ArrayList<Object> returnList = new ArrayList<Object>();
-
+        JSONParser parser = new JSONParser();
+        
         try {
-            JSONArray a = (JSONArray) parser.parse(new FileReader("data/" + filename));
-            // NOT SURE if file extension will be included??
+            @SuppressWarnings("resource")
+            Object obj = parser
+                    .parse(new BufferedReader(new FileReader("data/" + filename)).readLine());
 
-            if (fileKind == FileKind.Restaurant) {
+            JSONObject jsonObject = (JSONObject) obj; 
 
-                for (Object o : a) {
-
-                    JSONObject restaurant = (JSONObject) o;
-
-                    Object newRestaurant = new Restaurant((String) restaurant.get("url"),
-                            (String) restaurant.get("photo_url"), (double) restaurant.get("longitude"),
-                            (double) restaurant.get("latitude"), (String) restaurant.get("city"),
-                            (String) restaurant.get("full_address"), (String[]) restaurant.get("neighborhoods"),
-                            (String) restaurant.get("state"), (String[]) restaurant.get("schools"),
-                            (String) restaurant.get("name"), (String) restaurant.get("business_id"),
-                            (boolean) restaurant.get("open"), (String[]) restaurant.get("categories"),
-                            (float) restaurant.get("stars"), (int) restaurant.get("review_count"),
-                            (int) restaurant.get("price"));
-                    returnList.add(newRestaurant);
-
-                }
+           
+            JSONArray categories = (JSONArray) jsonObject.get("categories");
+            
+            if (fileKind == FileKind.Restaurant){
                 
-            } else if (fileKind == FileKind.Review) {
+                JSONObject restaurant = (JSONObject) obj;
 
-                for (Object o : a) {
+                Object newRestaurant = new Restaurant((String) restaurant.get("url"),
+                        (String) restaurant.get("photo_url"), (double) restaurant.get("longitude"),
+                        (double) restaurant.get("latitude"), (String) restaurant.get("city"),
+                        (String) restaurant.get("full_address"), (ArrayList<String>) restaurant.get("neighborhoods"),
+                        (String) restaurant.get("state"), (ArrayList<String>) restaurant.get("schools"),
+                        (String) restaurant.get("name"), (String) restaurant.get("business_id"),
+                        (boolean) restaurant.get("open"), (ArrayList<String>) restaurant.get("categories"),
+                        (double) restaurant.get("stars"), (int) restaurant.get("review_count"),
+                        (int) restaurant.get("price"));
+                returnList.add(newRestaurant);
+                
+            } else if (fileKind == FileKind.Review){
+                
+                JSONObject review = (JSONObject) obj;
 
-                    JSONObject review = (JSONObject) o;
+                Object newReview = new Review((String) review.get("business_id"), (String) review.get("user_id"),
+                        (ArrayList<Integer>) review.get("votes"), // PROBLEMS WILL ARISE
+                                                     // HERE.
+                        (String) review.get("review_id"), (String) review.get("text"), (double) review.get("stars"),
+                        (String) review.get("date"));
 
-                    Object newReview = new Review((String) review.get("business_id"), (String) review.get("user_id"),
-                            (int[]) review.get("votes"), // PROBLEMS WILL ARISE
-                                                         // HERE.
-                            (String) review.get("review_id"), (String) review.get("text"), (float) review.get("stars"),
-                            (String) review.get("date"));
+                returnList.add(newReview);
 
-                    returnList.add(newReview);
+            } else if (fileKind == FileKind.User){
+                
+                JSONObject user = (JSONObject) obj;
 
-                }
+                Object newUser = new User((String) user.get("url"), (ArrayList<Integer>) user.get("votes"), // PROBLEMS
+                                                                                               // WILL
+                                                                                               // ARISE
+                                                                                               // HERE.
+                        (int) user.get("review_count"), (String) user.get("user_id"), (String) user.get("name"),
+                        (double) user.get("average_stars"));
 
-            } else if (fileKind == FileKind.User) {
-
-                for (Object o : a) {
-
-                    JSONObject user = (JSONObject) o;
-
-                    Object newUser = new User((String) user.get("url"), (int[]) user.get("votes"), // PROBLEMS
-                                                                                                   // WILL
-                                                                                                   // ARISE
-                                                                                                   // HERE.
-                            (int) user.get("review_count"), (String) user.get("user_id"), (String) user.get("name"),
-                            (double) user.get("average_stars"));
-
-                    returnList.add(newUser);
-
-                }
+                returnList.add(newUser);
 
             }
+            
+            @SuppressWarnings("unchecked")
+            Iterator<String> iterator = categories.iterator();
+            while (iterator.hasNext()) {
+                System.out.print(iterator.next()+" ");
+            }
+            System.out.println();
 
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (FileNotFoundException p) {
-            p.printStackTrace();
-        } catch (IOException s) {
-            s.printStackTrace();
         }
+
+
+//        try {
+//            JSONArray a = (JSONArray) parser.parse(new FileReader("data/" + filename));
+//            // NOT SURE if file extension will be included??
+//
+//            if (fileKind == FileKind.Restaurant) {
+//
+//                for (Object o : a) {
+//
+//                    JSONObject restaurant = (JSONObject) o;
+//
+//                    Object newRestaurant = new Restaurant((String) restaurant.get("url"),
+//                            (String) restaurant.get("photo_url"), (double) restaurant.get("longitude"),
+//                            (double) restaurant.get("latitude"), (String) restaurant.get("city"),
+//                            (String) restaurant.get("full_address"), (String[]) restaurant.get("neighborhoods"),
+//                            (String) restaurant.get("state"), (String[]) restaurant.get("schools"),
+//                            (String) restaurant.get("name"), (String) restaurant.get("business_id"),
+//                            (boolean) restaurant.get("open"), (String[]) restaurant.get("categories"),
+//                            (float) restaurant.get("stars"), (int) restaurant.get("review_count"),
+//                            (int) restaurant.get("price"));
+//                    returnList.add(newRestaurant);
+//
+//                }
+//                
+//            } else if (fileKind == FileKind.Review) {
+//
+//                for (Object o : a) {
+//
+//                    JSONObject review = (JSONObject) o;
+//
+//                    Object newReview = new Review((String) review.get("business_id"), (String) review.get("user_id"),
+//                            (int[]) review.get("votes"), // PROBLEMS WILL ARISE
+//                                                         // HERE.
+//                            (String) review.get("review_id"), (String) review.get("text"), (float) review.get("stars"),
+//                            (String) review.get("date"));
+//
+//                    returnList.add(newReview);
+//
+//                }
+//
+//            } else if (fileKind == FileKind.User) {
+//
+//                for (Object o : a) {
+//
+//                    JSONObject user = (JSONObject) o;
+//
+//                    Object newUser = new User((String) user.get("url"), (int[]) user.get("votes"), // PROBLEMS
+//                                                                                                   // WILL
+//                                                                                                   // ARISE
+//                                                                                                   // HERE.
+//                            (int) user.get("review_count"), (String) user.get("user_id"), (String) user.get("name"),
+//                            (double) user.get("average_stars"));
+//
+//                    returnList.add(newUser);
+//
+//                }
+//
+//            }
+//
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        } catch (FileNotFoundException p) {
+//            p.printStackTrace();
+//        } catch (IOException s) {
+//            s.printStackTrace();
+//        }
 
         return returnList;
 
     }
+   
+    //private HashMap<String, >
 
 }

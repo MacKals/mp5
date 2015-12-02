@@ -1,24 +1,26 @@
 package ca.ece.ubc.cpen221.mp5;
 
+import java.util.ArrayList;
+
 // TODO: Use this class to represent a Yelp review.
 
 public class Review {
     
      String businessID;
      String userID;
-     int[] votes;
+     ArrayList<Integer> votes;
      String reviewID;
      String text;
-     float stars;
+     double stars;
      String date;
   
     
      public Review ( String businessID,
                     String userID,
-                    int[] votes,
+                    ArrayList<Integer> votes,
                     String reviewID,
                     String text,
-                    float stars,
+                    double stars,
                     String date){
          
          this.businessID = businessID;
@@ -35,7 +37,7 @@ public class Review {
          return this.userID;
      }
      
-     public float getStars(){
+     public double getStars(){
          return this.stars;
      }
      public String getBusinessID(){

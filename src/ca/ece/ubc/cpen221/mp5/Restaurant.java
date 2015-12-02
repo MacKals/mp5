@@ -1,5 +1,7 @@
 package ca.ece.ubc.cpen221.mp5;
 
+import java.util.ArrayList;
+
 import ca.ece.ubc.cpen221.mp5.statlearning.Coordinate;
 
 // TODO: Use this class to represent a restaurant.
@@ -12,18 +14,18 @@ public class Restaurant {
 
     private String city;
     private String fullAddress;
-    private String[] neighbourhoods;
+    private ArrayList<String> neighbourhoods;
     private String state;
-    private String[] schools;
+    private ArrayList<String> schools;
 
     private String name;
     private String businessID;
     private boolean open;
 
-    private String[] categories;
+    private ArrayList<String> categories;
     //private String type; // all are "business"??
 
-    private float stars;
+    private double stars;
     private int reviewCount;
     private int price;
     
@@ -35,17 +37,17 @@ public class Restaurant {
                         double latitude,
                         String city,
                         String fullAddress,
-                        String[] neighbourhoods,
+                        ArrayList<String> neighbourhoods,
                         String state,
-                        String[] schools,
+                        ArrayList<String> schools,
 
                         String name,
                         String businessID,
                         boolean open,
 
-                        String[] categories,
+                        ArrayList<String> categories,
 
-                        float stars,
+                        double stars,
                         int reviewCount,
                         int price){
         
@@ -103,7 +105,7 @@ public class Restaurant {
     }
     
     public String getLocationName() {
-        return city + fullAddress + neighbourhoods + state; // returns strings matching names describing location, for NodeIn
+        return city + fullAddress + neighbourhoods + state; // returns strings matching names describing location, for NodeIn // check this one out.
     }
 
     public double getStars() {

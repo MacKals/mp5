@@ -1,11 +1,13 @@
 package ca.ece.ubc.cpen221.mp5;
 
+import java.util.ArrayList;
+
 // TODO: Use this class to represent a Yelp user.
 
 public class User {
         
     private String url;
-    private int[] votes;
+    private ArrayList<Integer> votes;
     private int reviewCount;
     private String userID;
     private String name;
@@ -13,7 +15,7 @@ public class User {
     
     
     public User(String url,
-                 int[] votes,
+            ArrayList<Integer> votes,
                  int reviewCount,
                  String userID,
                  String name,

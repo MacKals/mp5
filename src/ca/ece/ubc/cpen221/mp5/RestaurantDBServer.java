@@ -15,6 +15,8 @@ public class RestaurantDBServer {
      */
     public RestaurantDBServer(int port, String restaurantDetails, String userReviews, String userDetails) {
         
+        new RestaurantDB(restaurantDetails, userReviews, userDetails);
+        
     }
     
     /**
@@ -24,7 +26,8 @@ public class RestaurantDBServer {
      * @param restaurantName
      */
     public String randomReview(String restaurantName){
-        return " ";
+       
+        return "not created random review yet";
     }
     
     /**
@@ -59,5 +62,7 @@ public class RestaurantDBServer {
     public boolean addReview(String reviewDetails){
         return false;
     }
+    
+    
 	
 }

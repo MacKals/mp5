@@ -111,7 +111,7 @@ public class Algorithms {
 	        
 	        if (review instanceof Review){
 	            
-	            if(((Review) review).getUserID().equals(u.getUserID())){ //this review was written by user U
+	            if (((Review) review).getUserID().equals(u.getUserID())){ //this review was written by user U
 	                
 	                //find the associated restaurant
 	                for (Object restaurant : db.getRestaurantList()){

@@ -9,6 +9,8 @@ public class QueryFactoryTest {
     @Test
     public void testLiterals() {
         assertTrue(false);
+        
+        
                 //FormulaFactory.parse("T").evaluate());
 
     }

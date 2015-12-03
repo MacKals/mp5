@@ -11,5 +11,7 @@ public class RestaurantDBTest {
         RestaurantDB db = new RestaurantDB("restaurants.json", "reviews.json", "users.json");
         db.getRestaurantList();
         System.out.print(db.toString());
+        
+        
     }
 }

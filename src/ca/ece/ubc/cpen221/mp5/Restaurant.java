@@ -133,9 +133,8 @@ public class Restaurant {
         
         obj.put("url", url);
         obj.put("photo_url", photoURL);
-        obj.put("longitude", coordinate.yCoord); //TODO: chich is longitude?
-        
-        obj.put("latitude", coordinate.xCoord);
+        obj.put("longitude", coordinate.xCoord);
+        obj.put("latitude", coordinate.yCoord);
         obj.put("city", city);
         obj.put("full_address", fullAddress);
         obj.put("neighborhoods", neighbourhoods);
@@ -151,6 +150,7 @@ public class Restaurant {
 
         StringWriter out = new StringWriter();
         obj.writeJSONString(out);
+        out.close();
         return out.toString();
     }
     

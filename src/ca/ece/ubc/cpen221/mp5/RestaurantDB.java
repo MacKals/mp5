@@ -66,16 +66,6 @@ public class RestaurantDB {
         return this.users;
     }
 
-    /**
-     * // Write specs, etc.MORTEN WRITE THIS SPEC PLEASE LOL.
-     * 
-     * @param queryString
-     * @return
-     */
-    public Set<Restaurant> query(String queryString) {
-        return QueryFactory.parse(queryString).result(this);
-    }
-
     public enum FileKind {
         Restaurant, Review, User;
     }

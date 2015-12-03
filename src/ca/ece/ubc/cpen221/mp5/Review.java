@@ -8,19 +8,19 @@ public class Review {
     
      String businessID;
      String userID;
-     ArrayList<Integer> votes;
+     Object votes;
      String reviewID;
      String text;
-     double stars;
+     int stars;
      String date;
   
     
      public Review ( String businessID,
                     String userID,
-                    ArrayList<Integer> votes,
+                    Object votes,
                     String reviewID,
                     String text,
-                    double stars,
+                    int stars,
                     String date){
          
          this.businessID = businessID;
@@ -37,7 +37,7 @@ public class Review {
          return this.userID;
      }
      
-     public double getStars(){
+     public int getStars(){
          return this.stars;
      }
      public String getBusinessID(){

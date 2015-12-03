@@ -116,8 +116,7 @@ public class RestaurantDBServer {
      */
     public String addRestaurant(String json) {
         
-        
-        return "false";
+        return db.addRestaurant(json);
     }
 
     /**
@@ -125,9 +124,8 @@ public class RestaurantDBServer {
      * @param json user information encoded as json string
      */
     public String addUser(String json) {
-        
-        
-        return "false";
+       
+        return db.addUser(json);
     }
 
     /**
@@ -136,8 +134,7 @@ public class RestaurantDBServer {
      */
     public String addReview(String json) {
         
-        
-        return "false";
+        return db.addReview(json);
     }
 
     /**

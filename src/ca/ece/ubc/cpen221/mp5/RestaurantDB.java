@@ -20,6 +20,8 @@ public class RestaurantDB {
     private ArrayList<Review> reviews = new ArrayList<>();
     private ArrayList<User> users = new ArrayList<>();
 
+    private boolean initComplete = false;
+    
     /**
      * Create a database from the Yelp dataset given the names of three files:
      * <ul>
@@ -42,7 +44,8 @@ public class RestaurantDB {
         addFromFile(restaurantJSONfilename, FileKind.Restaurant);
         addFromFile(reviewsJSONfilename, FileKind.Review);
         addFromFile(usersJSONfilename, FileKind.User);
-
+        
+        initComplete = true;
     }
 
     public ArrayList<Restaurant> getRestaurantList() { // Perhaps make a copy?
@@ -130,28 +133,37 @@ public class RestaurantDB {
     public String addRestaurant(String restaurantString) {
         
         JSONParser parser = new JSONParser();
-        Object obj = new Object();
 
         try {
-            obj = parser.parse(restaurantString);
+            
+            JSONObject restaurant = (JSONObject) parser.parse(restaurantString);
+            
+            Restaurant newRestaurant = new Restaurant((String) restaurant.get("url"), (String) restaurant.get("photo_url"),
+                    (double) restaurant.get("longitude"), (double) restaurant.get("latitude"),
+                    (String) restaurant.get("city"), (String) restaurant.get("full_address"),
+                    (ArrayList<String>) restaurant.get("neighborhoods"), (String) restaurant.get("state"),
+                    (ArrayList<String>) restaurant.get("schools"), (String) restaurant.get("name"),
+                    (String) restaurant.get("business_id"), (boolean) restaurant.get("open"),
+                    (ArrayList<String>) restaurant.get("categories"), (double) restaurant.get("stars"),
+                    RestaurantDB.safeLongToInt((long) restaurant.get("review_count")),
+                    RestaurantDB.safeLongToInt((long) restaurant.get("price")));
+            
+            //Check for duplication
+            if (initComplete) {
+                for (Restaurant restaurantInstance : restaurants) {
+                    if (restaurantInstance.getBusinessID() == newRestaurant.getBusinessID()) {
+                        return ReturnMessages.alreadyExistsError;
+                    }
+                }
+            }
+            
+            restaurants.add(newRestaurant);
+            
         } catch (ParseException e) {
             e.printStackTrace();
+            return ReturnMessages.malformedExpressionError;
         }
 
-        JSONObject restaurant = (JSONObject) obj;
-
-        Restaurant newRestaurant = new Restaurant((String) restaurant.get("url"), (String) restaurant.get("photo_url"),
-                (double) restaurant.get("longitude"), (double) restaurant.get("latitude"),
-                (String) restaurant.get("city"), (String) restaurant.get("full_address"),
-                (ArrayList<String>) restaurant.get("neighborhoods"), (String) restaurant.get("state"),
-                (ArrayList<String>) restaurant.get("schools"), (String) restaurant.get("name"),
-                (String) restaurant.get("business_id"), (boolean) restaurant.get("open"),
-                (ArrayList<String>) restaurant.get("categories"), (double) restaurant.get("stars"),
-                RestaurantDB.safeLongToInt((long) restaurant.get("review_count")),
-                RestaurantDB.safeLongToInt((long) restaurant.get("price")));
-
-        restaurants.add(newRestaurant);
-        
         return ReturnMessages.successful;
     }
 
@@ -179,9 +191,11 @@ public class RestaurantDB {
                     (String) user.get("name"), (double) user.get("average_stars"));
             
             //Check weather exists already
-            for (User userInstance : users) {                
-                if (userInstance.getUserID() == newUser.getUserID()) { //TODO: Searching for dupliation based on user id only - more needed?
-                    return ReturnMessages.alreadyExistsError;
+            if (initComplete) {
+                for (User userInstance : users) {                
+                    if (userInstance.getUserID() == newUser.getUserID()) { //TODO: Searching for dupliation based on user id only - more needed?
+                        return ReturnMessages.alreadyExistsError;
+                    }
                 }
             }
             
@@ -205,25 +219,21 @@ public class RestaurantDB {
      */ 
     public String addReview(String reviewString) {
         
-        JSONParser parser = new JSONParser();
-        
         try {
-            Object obj = new Object();
-            obj = parser.parse(reviewString);
             
-            JSONObject review = (JSONObject) obj;
+            JSONParser parser = new JSONParser();
+            JSONObject review = (JSONObject) parser.parse(reviewString);
 
             Review newReview = new Review((String) review.get("business_id"), (String) review.get("user_id"),
                     (Object) review.get("votes"), (String) review.get("review_id"), (String) review.get("text"),
                     RestaurantDB.safeLongToInt((long) review.get("stars")), (String) review.get("date"));
 
-            //Check if already exists
-            for (Object objectInstance : reviews) {
-                
-                Review reviewInstance = (Review) objectInstance;
-                
-                if (reviewInstance.reviewID == newReview.reviewID) {
-                    return ReturnMessages.alreadyExistsError;
+            //Check for duplication
+            if (initComplete) {
+                for (Review reviewInstance : reviews) {
+                    if (reviewInstance.reviewID == newReview.reviewID) {
+                        return ReturnMessages.alreadyExistsError;
+                    }
                 }
             }
             

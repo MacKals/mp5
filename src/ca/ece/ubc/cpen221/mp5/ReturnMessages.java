@@ -6,4 +6,6 @@ public class ReturnMessages {
     
     static final String alreadyExistsError = "allready exists";
     static final String malformedExpressionError = "mallformed expresion";
+    
+    static final String notFoundError = "not found";
 }

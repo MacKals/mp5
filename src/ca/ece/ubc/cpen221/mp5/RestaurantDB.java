@@ -122,15 +122,12 @@ public class RestaurantDB {
                 
                 JSONObject user = (JSONObject) obj;
 
-                Object newUser = new User((String) user.get("url"), (ArrayList<Integer>) user.get("votes"), // PROBLEMS
-                                                                                               // WILL
-                                                                                               // ARISE
-                                                                                               // HERE.
+                Object newUser = new User((String) user.get("url"), (ArrayList<Integer>) user.get("votes"), // problems may arise here
                         (int) user.get("review_count"), (String) user.get("user_id"), (String) user.get("name"),
                         (double) user.get("average_stars"));
 
                 returnList.add(newUser);
-
+                
             }
             
             @SuppressWarnings("unchecked")
@@ -214,7 +211,26 @@ public class RestaurantDB {
         return returnList;
 
     }
-   
-    //private HashMap<String, >
-
+    
+    
+    
+    //TODO: implement 
+    public boolean addRestaurant(String restaurantString) {
+        return false;
+    }
+    
+    
+    //TODO: implement 
+    public boolean addUser(String userString) {
+        
+        return false;
+    }
+    
+    
+    //TODO: implement 
+    public boolean addReview(String reviewString) {
+        
+        return false;
+    }
+    
 }

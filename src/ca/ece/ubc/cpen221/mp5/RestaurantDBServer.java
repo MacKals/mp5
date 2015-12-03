@@ -96,7 +96,7 @@ public class RestaurantDBServer {
             
             if (restaurant.getBusinessID() == businessID) {
                 try {
-                    return restaurant.jsonRepresentation();
+                    return restaurant.representationInJSON();
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -206,7 +206,7 @@ public class RestaurantDBServer {
         Set<Restaurant> matches = QueryFactory.parse(queryString).result(db);
         String output = "";
         for (Restaurant match : matches) {
-            output += match.jsonRepresentation();
+            output += match.representationInJSON();
         }
         
         //TODO: check what happens with return character etc.

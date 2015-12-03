@@ -127,7 +127,7 @@ public class Restaurant {
     
     //TODO: generate json of resturant for server
     @SuppressWarnings("unchecked")
-    public String jsonRepresentation() throws IOException {
+    public String representationInJSON() throws IOException {
         
         JSONObject obj=new JSONObject();
         

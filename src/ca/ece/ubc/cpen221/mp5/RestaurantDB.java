@@ -111,8 +111,7 @@ public class RestaurantDB {
                 JSONObject review = (JSONObject) obj;
 
                 Object newReview = new Review((String) review.get("business_id"), (String) review.get("user_id"),
-                        (ArrayList<Integer>) review.get("votes"), // PROBLEMS WILL ARISE
-                                                     // HERE.
+                        (ArrayList<Integer>) review.get("votes"), // PROBLEMS WILL ARISE HERE.
                         (String) review.get("review_id"), (String) review.get("text"), (double) review.get("stars"),
                         (String) review.get("date"));
 
@@ -216,6 +215,9 @@ public class RestaurantDB {
     
     //TODO: implement 
     public boolean addRestaurant(String restaurantString) {
+        
+        
+        
         return false;
     }
     

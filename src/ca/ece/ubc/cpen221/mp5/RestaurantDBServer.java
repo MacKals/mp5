@@ -21,7 +21,14 @@ import java.util.regex.Pattern;
  * number, or "err" is used to indicate a misformatted request.
  * FinbonacciServerMulti can handle multiple concurrent clients.
  */
+ 
+/**
+ * A server that is capable of accepting queries from many clients and executing those queries concurrently. 
+ * The clients communicate with the server by sending a query (a String) and they receive, in JSON format, a list of restaurants that satisfies the query.
 
+
+ * 
+ */
 public class RestaurantDBServer {
 
     private ServerSocket serverSocket;
@@ -80,7 +87,6 @@ public class RestaurantDBServer {
         }
         
         
-        
         return "not created random review yet";
     }
 
@@ -128,7 +134,6 @@ public class RestaurantDBServer {
     public boolean addUser(String json) {
         
         
-        
         return false;
     }
 
@@ -137,7 +142,6 @@ public class RestaurantDBServer {
      * @param json review information encoded as json string
      */
     public boolean addReview(String json) {
-        
         
         
         return false;
@@ -197,6 +201,11 @@ public class RestaurantDBServer {
         }
     }
 
+    /**
+     * 
+     * @param queryString
+     * @return
+     */
     private boolean callFunctionFromClientRequest(String queryString) {
 
         ClientQuery query = ClientQuery.fromString(queryString);
@@ -226,6 +235,9 @@ public class RestaurantDBServer {
         return false;
     }
 
+    /**
+     * 
+     */
     enum ClientQuery {
 
         RandomReview, GetRestaurant, AddRestaurant, AddUser, AddReview;

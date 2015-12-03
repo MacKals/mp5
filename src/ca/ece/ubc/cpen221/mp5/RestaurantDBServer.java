@@ -7,8 +7,11 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ca.ece.ubc.cpen221.mp5.query.QueryFactory;
 
 // TODO: Implement a server that will instantiate a database, 
 // process queries concurrently, etc.
@@ -111,30 +114,30 @@ public class RestaurantDBServer {
      * (for example: does another restaurant with the same name exist at the same location
      * @param json restaurant information encoded in json string
      */
-    public boolean addRestaurant(String json) {
+    public String addRestaurant(String json) {
         
         
-        return false;
+        return "false";
     }
 
     /**
      * 
      * @param json user information encoded as json string
      */
-    public boolean addUser(String json) {
+    public String addUser(String json) {
         
         
-        return false;
+        return "false";
     }
 
     /**
      * 
      * @param json review information encoded as json string
      */
-    public boolean addReview(String json) {
+    public String addReview(String json) {
         
         
-        return false;
+        return "false";
     }
 
     /**
@@ -164,25 +167,25 @@ public class RestaurantDBServer {
         // that convert it from a byte stream to a character stream,
         // and that buffer it so that we can read a line at a time
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
+        
         // similarly, wrap character=>bytestream converter around the
         // socket output stream, and wrap a PrintWriter around that so
         // that we have more convenient ways to write Java primitive
         // types to it.
         PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-
+        
         try {
             // each request is a single line containing a number
             for (String line = in.readLine(); line != null; line = in.readLine()) {
                 System.err.println("request: " + line);
                 try {
-                    callFunctionFromClientRequest(line);
+                    out.println( callFunctionFromClientRequest(line) );
                 } catch (NumberFormatException e) {
                     // complain about ill-formatted request
-                    System.err.println("reply: err");
                     out.println("err");
                 }
-                // important! flush our buffer so the reply is sent
+                
+                // flushing buffer so the reply is sent
                 out.flush();
             }
         } finally {
@@ -191,42 +194,64 @@ public class RestaurantDBServer {
         }
     }
 
+
     /**
+     * Takes a query string and launches the Antlr query parser
      * 
-     * @param queryString
-     * @return
+     * @param queryString query string (in format outlined in assignment) that specify the search query 
+     * @return json string representation of query
+     * @throws IOException if something goes wrong
      */
-    private boolean callFunctionFromClientRequest(String queryString) {
+    public String query(String queryString) throws IOException {
+        Set<Restaurant> matches = QueryFactory.parse(queryString).result(db);
+        String output = "";
+        for (Restaurant match : matches) {
+            output += match.jsonRepresentation();
+        }
+        
+        //TODO: check what happens with return character etc.
+        
+        return output;
+    }
+    
+    
+    /**
+     * Call the appropriate query function based on the input string
+     * @param queryString Input string, either specifying one of the specific query methods, or a query search
+     * @return result of query in Json format
+     */
+    private String callFunctionFromClientRequest(String queryString) {
 
         ClientQuery query = ClientQuery.fromString(queryString);
 
         switch (query) {
         case RandomReview:
-            randomReview(query.getQueryArgument());
-            return true;
+            return randomReview(query.getQueryArgument());
 
         case GetRestaurant:
-            getRestaurant(query.getQueryArgument());
-            return true;
+            return getRestaurant(query.getQueryArgument());
 
         case AddRestaurant:
-            addRestaurant(query.getQueryArgument());
-            return true;
+            return addRestaurant(query.getQueryArgument());
 
         case AddUser:
-            addUser(query.getQueryArgument());
-            return true;
+            return addUser(query.getQueryArgument());
 
         case AddReview:
-            addReview(query.getQueryArgument());
-            return true;
+            return addReview(query.getQueryArgument());
         }
-
-        return false;
+        
+        try {
+            return query(queryString);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            return "query error - not reognized"; //TODO: make propper return message
+        }
     }
 
     /**
-     * 
+     * Specifies the specific query formats and associated strings, 
+     * enabling the appropriate methods to be called more easily
      */
     enum ClientQuery {
 
@@ -241,7 +266,7 @@ public class RestaurantDBServer {
         static ClientQuery fromString(String clientString) {
 
             for (ClientQuery query : ClientQuery.values()) {
-
+                
                 String queryString = query.toString();
                 String substring = clientString.substring(0, queryString.length() - 1);
 
@@ -263,6 +288,7 @@ public class RestaurantDBServer {
         @Override
         public String toString() {
             switch (this) {
+                
             case RandomReview:
                 return "randomReview";
 

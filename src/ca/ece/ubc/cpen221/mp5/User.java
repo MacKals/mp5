@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class User {
         
     private String url;
-    private ArrayList<Integer> votes;
+    private Object votes;
     private int reviewCount;
     private String userID;
     private String name;
@@ -15,7 +15,7 @@ public class User {
     
     
     public User(String url,
-            ArrayList<Integer> votes,
+                 Object votes,
                  int reviewCount,
                  String userID,
                  String name,

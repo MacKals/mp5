@@ -8,7 +8,7 @@ public class RestaurantDBTest {
 
     @Test
     public void test() {
-        RestaurantDB db = new RestaurantDB("restaurantsTest.json", "blankFile.json", "blankFile.json");
+        RestaurantDB db = new RestaurantDB("restaurants.json", "reviews.json", "users.json");
         db.getRestaurantList();
         System.out.print(db.toString());
     }

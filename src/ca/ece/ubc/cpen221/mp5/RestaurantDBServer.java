@@ -14,19 +14,9 @@ import java.util.regex.Pattern;
 // process queries concurrently, etc.
 
 /**
- * TODO: modify to suit this FibonacciServerMulti is a server that finds the
- * n^th Fibonacci number given n. It accepts requests of the form: Request ::=
- * Number "\n" Number ::= [0-9]+ and for each request, returns a reply of the
- * form: Reply ::= (Number | "err") "\n" where a Number is the request Fibonacci
- * number, or "err" is used to indicate a misformatted request.
- * FinbonacciServerMulti can handle multiple concurrent clients.
- */
- 
-/**
  * A server that is capable of accepting queries from many clients and executing those queries concurrently. 
- * The clients communicate with the server by sending a query (a String) and they receive, in JSON format, a list of restaurants that satisfies the query.
-
-
+ * The clients communicate with the server by sending a query (a String) and they receive, in JSON format, 
+ * a list of restaurants that satisfies the query.
  * 
  */
 public class RestaurantDBServer {

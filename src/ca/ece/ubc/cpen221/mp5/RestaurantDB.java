@@ -32,7 +32,7 @@ public class RestaurantDB {
     /**
      * Create a database from the Yelp dataset given the names of three files:
      * <ul>
-     * <li>One that contains data about the restaurants;</li>
+     * <li>One that contains data abonewUserut the restaurants;</li>
      * <li>One that contains reviews of the restaurants;</li>
      * <li>One that contains information about the users that submitted reviews.
      * </li>
@@ -135,7 +135,7 @@ public class RestaurantDB {
      * @param restaurantString a string in JSON format corresponding to a restaurant in the Yelp database.
      * @return true if restaurant add was successful, false otherwise.
      */
-    public boolean addRestaurant(String restaurantString) {
+    public String addRestaurant(String restaurantString) {
         
         JSONParser parser = new JSONParser();
         Object obj = new Object();
@@ -167,24 +167,40 @@ public class RestaurantDB {
      * @param usertString a string in JSON format corresponding to a user in the Yelp database.
      * @return true if user add was successful, false otherwise.
      */
-    public boolean addUser(String userString) {
+    public String addUser(String userString) {
         
         JSONParser parser = new JSONParser();
-        Object obj = new Object();
         
         try {
+           
+            Object obj = new Object();            
             obj = parser.parse(userString);
+            
+            JSONObject user = (JSONObject) obj;
+            
+            User newUser = new User((String) user.get("url"), (Object) user.get("votes"),
+                    RestaurantDB.safeLongToInt((long) user.get("review_count")), (String) user.get("user_id"),
+                    (String) user.get("name"), (double) user.get("average_stars"));
+            
+            //Check weather exists already
+            for (Object object : users) {
+                
+                User userInstance = (User) object;
+                
+                if (userInstance.getUserID() == newUser.getUserID()) { //TODO: Searching for dupliation based on user id only - more needed?
+                    return ReturnMessages.allreadyExistsError;
+                }
+                    
+            }
+            
+            users.add(newUser);
+            
         } catch (ParseException e) {
             e.printStackTrace();
+            return ReturnMessages.mallformedExpressionError;
         }
         
-        JSONObject user = (JSONObject) obj;
-        
-        Object newUser = new User((String) user.get("url"), (Object) user.get("votes"),
-                RestaurantDB.safeLongToInt((long) user.get("review_count")), (String) user.get("user_id"),
-                (String) user.get("name"), (double) user.get("average_stars"));
-
-        return users.add(newUser);
+        return ReturnMessages.successfull;
     }
     
     
@@ -192,26 +208,37 @@ public class RestaurantDB {
      * @param reviewString a string in JSON format corresponding to a review in the Yelp database.
      * @return true if review add was successful, false otherwise.
      */ 
-    public boolean addReview(String reviewString) {
+    public String addReview(String reviewString) {
         
         JSONParser parser = new JSONParser();
-        Object obj = new Object();
         
         try {
+            Object obj = new Object();
             obj = parser.parse(reviewString);
+            
+            JSONObject review = (JSONObject) obj;
+
+            Review newReview = new Review((String) review.get("business_id"), (String) review.get("user_id"),
+                    (Object) review.get("votes"), (String) review.get("review_id"), (String) review.get("text"),
+                    RestaurantDB.safeLongToInt((long) review.get("stars")), (String) review.get("date"));
+
+            //Check if already exists
+            for (Object objectInstance : reviews) {
+                
+                Review reviewInstance = (Review) objectInstance;
+                
+                if (reviewInstance.reviewID == newReview.reviewID) {
+                    return ReturnMessages.allreadyExistsError;
+                }
+            }
+            
+            reviews.add(newReview);
+            
         } catch (ParseException e) {
             e.printStackTrace();
+            return ReturnMessages.mallformedExpressionError;
         }
         
-        JSONObject review = (JSONObject) obj;
-        
-
-        Object newReview = new Review((String) review.get("business_id"), (String) review.get("user_id"),
-                (Object) review.get("votes"), (String) review.get("review_id"), (String) review.get("text"),
-                RestaurantDB.safeLongToInt((long) review.get("stars")), (String) review.get("date"));
-
-        return reviews.add(newReview);
+        return ReturnMessages.successfull;
     }
-    
-
 }

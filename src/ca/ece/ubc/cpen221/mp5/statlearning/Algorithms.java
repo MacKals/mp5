@@ -3,6 +3,7 @@ package ca.ece.ubc.cpen221.mp5.statlearning;
 import java.util.Set;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import ca.ece.ubc.cpen221.mp5.*;
 
@@ -63,11 +64,15 @@ public class Algorithms {
         for (int i = 0; i < k; i++) {
             kNodes.add(new Coordinate(Math.random() * (maxX - minX) + minX, Math.random() * (maxY - minY) + minY));
         }
-
+        
+        for(int i = 0; i< k; i++){
+            allClusters.add(new HashSet<Restaurant>());
+        }
+        
         // assign all restaurants to a kNode
         for (Restaurant restaurant : restaurants) {
 
-            allClusters.get(restaurant.getLocation().findClosestNeighbour(kNodes)).add(restaurant);
+            allClusters.get( restaurant.getLocation().findClosestNeighbour(kNodes) ).add(restaurant);
 
         }
 

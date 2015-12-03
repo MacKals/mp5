@@ -3,21 +3,12 @@ package ca.ece.ubc.cpen221.mp5;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-import com.sun.javafx.scene.paint.GradientUtils.Parser;
-
-import ca.ece.ubc.cpen221.mp5.query.QueryFactory;
-
 import org.json.simple.parser.JSONParser;
-import org.json.simple.JSONArray;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
-import java.util.stream.Stream;
 
 // TODO: This class represents the Restaurant Database.
 // Define the internal representation and 
@@ -25,9 +16,9 @@ import java.util.stream.Stream;
 
 public class RestaurantDB {
 
-    private ArrayList<Object> restaurants = new ArrayList<Object>();
-    private ArrayList<Object> reviews = new ArrayList<Object>();
-    private ArrayList<Object> users = new ArrayList<Object>();
+    private ArrayList<Restaurant> restaurants = new ArrayList<>();
+    private ArrayList<Review> reviews = new ArrayList<>();
+    private ArrayList<User> users = new ArrayList<>();
 
     /**
      * Create a database from the Yelp dataset given the names of three files:
@@ -54,15 +45,15 @@ public class RestaurantDB {
 
     }
 
-    public ArrayList<Object> getRestaurantList() { // Perhaps make a copy?
+    public ArrayList<Restaurant> getRestaurantList() { // Perhaps make a copy?
         return this.restaurants;
     }
 
-    public ArrayList<Object> getReviewList() {// Perhaps make a copy?
+    public ArrayList<Review> getReviewList() {// Perhaps make a copy?
         return this.reviews;
     }
 
-    public ArrayList<Object> getUserList() {// Perhaps make a copy?
+    public ArrayList<User> getUserList() {// Perhaps make a copy?
         return this.users;
     }
 
@@ -89,27 +80,17 @@ public class RestaurantDB {
             while (fileEntries.hasNext()) {
 
                 if (fileKind == FileKind.Restaurant) {
-
-                    System.out.println("reading a restaurant");
-
                     addRestaurant(fileEntries.next());
 
                 } else if (fileKind == FileKind.Review) {
-
-                    System.out.println("reading a review");
-
                     addReview(fileEntries.next());
 
                 } else if (fileKind == FileKind.User) {
-
-                    System.out.println("reading a user");
-
                     addUser(fileEntries.next());
 
                 }
 
                 System.out.println("Now we're here");
-                System.out.println();
             }
 
         } catch (Exception e) {
@@ -159,7 +140,7 @@ public class RestaurantDB {
 
         JSONObject restaurant = (JSONObject) obj;
 
-        Object newRestaurant = new Restaurant((String) restaurant.get("url"), (String) restaurant.get("photo_url"),
+        Restaurant newRestaurant = new Restaurant((String) restaurant.get("url"), (String) restaurant.get("photo_url"),
                 (double) restaurant.get("longitude"), (double) restaurant.get("latitude"),
                 (String) restaurant.get("city"), (String) restaurant.get("full_address"),
                 (ArrayList<String>) restaurant.get("neighborhoods"), (String) restaurant.get("state"),
@@ -171,7 +152,7 @@ public class RestaurantDB {
 
         restaurants.add(newRestaurant);
         
-        return ReturnMessages.successfull;
+        return ReturnMessages.successful;
     }
 
     /**
@@ -198,24 +179,20 @@ public class RestaurantDB {
                     (String) user.get("name"), (double) user.get("average_stars"));
             
             //Check weather exists already
-            for (Object object : users) {
-                
-                User userInstance = (User) object;
-                
+            for (User userInstance : users) {                
                 if (userInstance.getUserID() == newUser.getUserID()) { //TODO: Searching for dupliation based on user id only - more needed?
-                    return ReturnMessages.allreadyExistsError;
+                    return ReturnMessages.alreadyExistsError;
                 }
-                    
             }
             
             users.add(newUser);
             
         } catch (ParseException e) {
             e.printStackTrace();
-            return ReturnMessages.mallformedExpressionError;
+            return ReturnMessages.malformedExpressionError;
         }
         
-        return ReturnMessages.successfull;
+        return ReturnMessages.successful;
     }
 
     /**
@@ -246,7 +223,7 @@ public class RestaurantDB {
                 Review reviewInstance = (Review) objectInstance;
                 
                 if (reviewInstance.reviewID == newReview.reviewID) {
-                    return ReturnMessages.allreadyExistsError;
+                    return ReturnMessages.alreadyExistsError;
                 }
             }
             
@@ -254,9 +231,9 @@ public class RestaurantDB {
             
         } catch (ParseException e) {
             e.printStackTrace();
-            return ReturnMessages.mallformedExpressionError;
+            return ReturnMessages.malformedExpressionError;
         }
         
-        return ReturnMessages.successfull;
+        return ReturnMessages.successful;
     }
 }

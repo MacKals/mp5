@@ -123,6 +123,7 @@ public class RestaurantDB {
                     returnList.add(newReview);
                     reviews.add(newReview);
 
+
                 } else if (fileKind == FileKind.User) {
 
                     System.out.println("reading a user");
@@ -139,6 +140,10 @@ public class RestaurantDB {
 
                 System.out.println("Now we're here");
                 System.out.println();
+
+                
+                
+
             }
 
             
@@ -151,11 +156,36 @@ public class RestaurantDB {
 
     }
 
+
     private static int safeLongToInt(long l) {
         if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
             throw new IllegalArgumentException(l + " cannot be cast to int without changing its value.");
         }
         return (int) l;
     }
+
+
+    
+    
+    
+    //TODO: implement 
+    public boolean addRestaurant(String restaurantString) {
+        return false;
+    }
+    
+    
+    //TODO: implement 
+    public boolean addUser(String userString) {
+        
+        return false;
+    }
+    
+    
+    //TODO: implement 
+    public boolean addReview(String reviewString) {
+        
+        return false;
+    }
+    
 
 }

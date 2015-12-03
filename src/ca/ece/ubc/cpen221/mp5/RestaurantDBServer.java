@@ -62,7 +62,21 @@ public class RestaurantDBServer {
     public String randomReview(String restaurantName) {
         
         for (Object object : db.getRestaurantList()) {
-//            restaurant = 
+            
+            Restaurant restaurant = (Restaurant) object;
+            
+            if (restaurant.getName() == restaurantName) {
+                String restaurantID = restaurant.getBusinessID();
+                
+                for (Object rewiewObject : db.getReviewList()) {
+                    Review review = (Review) rewiewObject;
+                    
+                    if (review.businessID == restaurantID) {
+                        return String.valueOf(review.getStars());
+                    }
+                }
+                
+            }
         }
         
         
@@ -77,30 +91,55 @@ public class RestaurantDBServer {
      * @param businessID
      */
     public String getRestaurant(String businessID) {
-        return " ";
+        
+        for (Object object : db.getRestaurantList()) {
+            Restaurant restaurant = (Restaurant) object;
+            
+            if (restaurant.getBusinessID() == businessID) {
+                try {
+                    return restaurant.jsonRepresentation();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }  
+            }
+        }
+        
+        return "cannot get resturant";
     }
 
     /**
      * The server adds a new restaurant to the database if it does not exist
      * already.
+     * The server should add a new restaurant to the database with suitable checking 
+     * (for example: does another restaurant with the same name exist at the same location
+     * @param json restaurant information encoded in json string
      */
-    public boolean addRestaurant() {
+    public boolean addRestaurant(String json) {
+        
+        
         return false;
     }
 
     /**
      * 
-     * @param userDetails
+     * @param json user information encoded as json string
      */
-    public boolean addUser(String userDetails) {
+    public boolean addUser(String json) {
+        
+        
+        
         return false;
     }
 
     /**
      * 
-     * @param reviewDetails
+     * @param json review information encoded as json string
      */
-    public boolean addReview(String reviewDetails) {
+    public boolean addReview(String json) {
+        
+        
+        
         return false;
     }
 
@@ -172,7 +211,7 @@ public class RestaurantDBServer {
             return true;
 
         case AddRestaurant:
-            addRestaurant();
+            addRestaurant(query.getQueryArgument());
             return true;
 
         case AddUser:

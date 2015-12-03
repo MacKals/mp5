@@ -1,6 +1,10 @@
 package ca.ece.ubc.cpen221.mp5;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
+
+import org.json.simple.JSONObject;
 
 import ca.ece.ubc.cpen221.mp5.statlearning.Coordinate;
 
@@ -119,7 +123,36 @@ public class Restaurant {
     public Restaurant copy() {
         return new Restaurant(this);
     }
-  
+    
+    
+    //TODO: generate json of resturant for server
+    @SuppressWarnings("unchecked")
+    public String jsonRepresentation() throws IOException {
+        
+        JSONObject obj=new JSONObject();
+        
+        obj.put("url", url);
+        obj.put("photo_url", photoURL);
+        obj.put("longitude", coordinate.yCoord); //TODO: chich is longitude?
+        
+        obj.put("latitude", coordinate.xCoord);
+        obj.put("city", city);
+        obj.put("full_address", fullAddress);
+        obj.put("neighborhoods", neighbourhoods);
+        obj.put("state", state);
+        obj.put("schools", schools);
+        obj.put("name", name);
+        obj.put("business_id", businessID);
+        obj.put("open", open);
+        obj.put("categories", categories);
+        obj.put("stars", stars);
+        obj.put("review_count", reviewCount);
+        obj.put("price", price);
+
+        StringWriter out = new StringWriter();
+        obj.writeJSONString(out);
+        return out.toString();
+    }
     
     @Override
     public boolean equals(Object object) {

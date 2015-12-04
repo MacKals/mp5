@@ -90,7 +90,7 @@ public class RestaurantDB {
 
                 }
 
-                System.out.println("Now we're here");
+                //System.out.println("Now we're here");
             }
 
         } catch (Exception e) {

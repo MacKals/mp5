@@ -27,7 +27,8 @@ public class Algorithms {
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
 
         boolean calibrating = true;
-
+        int counter = 0;
+        
         double maxX = 0;
         double minX = 0;
         double maxY = 0;
@@ -77,18 +78,22 @@ public class Algorithms {
         }
 
         while (calibrating) {
+            
+            System.out.println("Calibrating... take " + counter);
+            
             calibrating = false;
+            
             // recompute the location of the nodes as the centroid.
-            for (Coordinate node : kNodes) {
-
-                int index = kNodes.indexOf(node);
-                kNodes.remove(index);
-
-                if (!node.equals(computeCentroidOfRestaurants(allClusters.get(index)))) {
+            for (int i = 0; i < kNodes.size(); i++) {
+                
+                kNodes.remove(i);
+                kNodes.add( i, computeCentroidOfRestaurants(allClusters.get(i)) );
+                
+                if (!kNodes.get(i).equals(computeCentroidOfRestaurants(allClusters.get(i)))) {
                     calibrating = true;
+                    
                 }
-
-                kNodes.add(index, computeCentroidOfRestaurants(allClusters.get(index)));
+                
             }
 
             if (!calibrating)
@@ -96,12 +101,18 @@ public class Algorithms {
 
             // reassign all restaurants to the kNodes
             allClusters.clear();
+            
+            for(int i = 0; i< k; i++){
+                allClusters.add(new HashSet<Restaurant>());
+            }
 
             for (Restaurant restaurant : restaurants) {
 
                 allClusters.get(restaurant.getLocation().findClosestNeighbour(kNodes)).add(restaurant);
 
             }
+            
+            counter++;
 
         }
 

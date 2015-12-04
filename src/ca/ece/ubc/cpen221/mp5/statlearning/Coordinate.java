@@ -40,9 +40,9 @@ public class Coordinate {
         
         if (coordinate instanceof Coordinate){
             
-            if (((Coordinate) coordinate).xCoord <= this.xCoord +0.00001 && ((Coordinate) coordinate).xCoord >= this.xCoord - 0.00001 ){
+            if (((Coordinate) coordinate).xCoord <= this.xCoord +0.0000001 && ((Coordinate) coordinate).xCoord >= this.xCoord - 0.0000001 ){
                 
-                    if (((Coordinate) coordinate).yCoord <= this.yCoord + 00001 && ((Coordinate) coordinate).yCoord >= this.yCoord - 00001) {
+                    if (((Coordinate) coordinate).yCoord <= this.yCoord + 0000001 && ((Coordinate) coordinate).yCoord >= this.yCoord - 0000001) {
                         return true;
                     }
                 

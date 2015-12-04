@@ -100,6 +100,8 @@ public class Algorithms {
                 }
             }
         }
+        
+        //enter the calibration stage.
 
         while (calibrating) {
 
@@ -119,6 +121,7 @@ public class Algorithms {
 
 
             // recompute the location of the nodes as the centroid.
+            
             for (int i = 0; i < k; i++) {
                 
                 if (!allClusters.get(i).isEmpty()){

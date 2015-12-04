@@ -8,4 +8,5 @@ public class ReturnMessages {
     static final String malformedExpressionError = "mallformed expresion";
     
     static final String notFoundError = "not found";
+    static final String noMatches = "no matches";
 }

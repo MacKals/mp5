@@ -35,6 +35,9 @@ public class Restaurant {
     
     private Coordinate coordinate;
     
+    private JSONObject restaurantObject;
+
+    
     public Restaurant ( String url,
                         String photoURL,
                         double longitude,
@@ -53,7 +56,9 @@ public class Restaurant {
 
                         double stars,
                         int reviewCount,
-                        int price){
+                        int price,
+                        
+                        JSONObject restaurantObject){
         
         this.city = city;
         this.fullAddress = fullAddress;
@@ -125,11 +130,11 @@ public class Restaurant {
     }
     
     
-    //TODO: generate json of resturant for server
-    @SuppressWarnings("unchecked")
     public String representationInJSON() throws IOException {
         
-        JSONObject obj=new JSONObject();
+        return restaurantObject.toJSONString();
+
+        /*JSONObject obj = new JSONObject();
         
         obj.put("url", url);
         obj.put("photo_url", photoURL);
@@ -151,7 +156,7 @@ public class Restaurant {
         StringWriter out = new StringWriter();
         obj.writeJSONString(out);
         out.close();
-        return out.toString();
+        return out.toString();*/
     }
     
     @Override

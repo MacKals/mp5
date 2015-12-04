@@ -92,10 +92,7 @@ public class RestaurantDB {
                     addUser(fileEntries.next());
 
                 }
-
-                System.out.println("Now we're here");
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -137,7 +134,7 @@ public class RestaurantDB {
         try {
             
             JSONObject restaurant = (JSONObject) parser.parse(restaurantString);
-            
+                        
             Restaurant newRestaurant = new Restaurant((String) restaurant.get("url"), (String) restaurant.get("photo_url"),
                     (double) restaurant.get("longitude"), (double) restaurant.get("latitude"),
                     (String) restaurant.get("city"), (String) restaurant.get("full_address"),
@@ -146,7 +143,8 @@ public class RestaurantDB {
                     (String) restaurant.get("business_id"), (boolean) restaurant.get("open"),
                     (ArrayList<String>) restaurant.get("categories"), (double) restaurant.get("stars"),
                     RestaurantDB.safeLongToInt((long) restaurant.get("review_count")),
-                    RestaurantDB.safeLongToInt((long) restaurant.get("price")));
+                    RestaurantDB.safeLongToInt((long) restaurant.get("price")), restaurant);
+            
             
             //Check for duplication
             if (initComplete) {

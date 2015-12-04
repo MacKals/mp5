@@ -1,6 +1,9 @@
 package ca.ece.ubc.cpen221.mp5;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.json.simple.JSONObject;
 
 // TODO: Use this class to represent a Yelp user.
 
@@ -13,13 +16,15 @@ public class User {
     private String name;
     private double averageStars;
     
+    private JSONObject userObject;
     
     public User(String url,
                  Object votes,
                  int reviewCount,
                  String userID,
                  String name,
-                 double averageStars){
+                 double averageStars,
+                 JSONObject userObject){
         
         this.url = url;
         this.votes = votes;
@@ -28,6 +33,7 @@ public class User {
         this.name = name;
         this.averageStars = averageStars;
         
+        this.userObject = userObject;
     }
     
     public int getReviewCount(){
@@ -44,6 +50,10 @@ public class User {
     
     public String getUserID(){
         return this.userID;
+    }
+    
+    public String representationInJSON() throws IOException {
+        return userObject.toJSONString();
     }
     
     @Override

@@ -37,7 +37,7 @@ public class RestaurantDBServer {
      * 
      * @param port
      *            the port number of the server, requires 0 <= port <= 65535
-
+     * 
      * @param restaurantDetails
      *            JSON Format of the restaurant details
      * @param userReviews
@@ -45,9 +45,10 @@ public class RestaurantDBServer {
      * @param userDetails
      *            JSON Format of the user details
      */
-    public RestaurantDBServer(int port, String restaurantDetails, String userReviews, String userDetails) throws IOException {
+    public RestaurantDBServer(int port, String restaurantDetails, String userReviews, String userDetails)
+            throws IOException {
         db = new RestaurantDB(restaurantDetails, userReviews, userDetails);
-//        serverSocket = new ServerSocket(port);
+        // serverSocket = new ServerSocket(port);
     }
 
     /**
@@ -57,12 +58,12 @@ public class RestaurantDBServer {
         try {
             RestaurantDBServer server = new RestaurantDBServer(Integer.parseInt(args[0]), args[1], args[2], args[3]);
             server.serve();
-            
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * To this request, the server should respond by providing a random review
      * (in JSON format) for the restaurant that matches the provided name. If
@@ -74,17 +75,14 @@ public class RestaurantDBServer {
     public String randomReview(String restaurantName) {
 
         for (Restaurant restaurant : db.getRestaurantList()) {
-
-            if (restaurant.getName() == restaurantName) {
-
+            if (restaurant.getName().equals(restaurantName)) {
                 String restaurantID = restaurant.getBusinessID();
 
                 for (Review review : db.getReviewList()) {
-                    if (review.businessID == restaurantID) {
-                        return String.valueOf(review.getStars());
+                    if (review.businessID.equals(restaurantID)) {
+                        return "";
                     }
                 }
-
             }
         }
 
@@ -102,7 +100,7 @@ public class RestaurantDBServer {
         for (Object object : db.getRestaurantList()) {
             Restaurant restaurant = (Restaurant) object;
 
-            if (restaurant.getBusinessID() == businessID) {
+            if (restaurant.getBusinessID().equals(businessID)) {
                 try {
                     return restaurant.representationInJSON();
                 } catch (IOException e) {
@@ -198,19 +196,24 @@ public class RestaurantDBServer {
      *            query string (in format outlined in assignment) that specify
      *            the search query
      * @return json string representation of query
-     * @throws IOException
-     *             if something goes wrong
      */
-    public String query(String queryString) throws IOException {
-        Set<Restaurant> matches = QueryFactory.parse(queryString).result(db);
-        String output = "";
-        for (Restaurant match : matches) {
-            output += match.representationInJSON();
+    public String query(String queryString) {
+
+        try {
+
+            Set<Restaurant> matches = QueryFactory.parse(queryString).result(db);
+            String output = "";
+            for (Restaurant match : matches) {
+                output += match.representationInJSON();
+            }
+            
+            return output;
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        // TODO: check what happens with return character etc.
-
-        return output;
+        return ReturnMessages.noMatches;
     }
 
     /**
@@ -242,13 +245,7 @@ public class RestaurantDBServer {
             return addReview(query.getQueryArgument());
         }
 
-        try {
-            return query(queryString);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            return "query error - not reognized"; // TODO: make propper return
-                                                  // message
-        }
+        return query(queryString);
     }
 
     /**

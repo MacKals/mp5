@@ -23,22 +23,22 @@ public class RestaurantDBServerTest {
     @Test
     public void testRandomReview() {
         
-        String output = server.randomReview("La Val's Pizza");
-        
-        String test = output;
+        System.out.println(server.randomReview("La Val's Pizza"));
+      
     }
 
     @Test
     public void testGetRestaurant() {
         
-        
+        System.out.println(server.getRestaurant("4D7IdtyRjH8qxcsHaz1-GA"));
         
     }
     
     @Test
     public void testAddRestaurant() {
         
-        
+        System.out.println(server.addRestaurant("La Val's Pizza"));
+
         
     }
     
@@ -56,9 +56,6 @@ public class RestaurantDBServerTest {
     
     @Test
     public void testSearchQuery() {
-        
-        
+        System.out.println(server.query("price(1..2)"));
     }
-    
-    
 }

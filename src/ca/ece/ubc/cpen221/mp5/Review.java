@@ -1,6 +1,9 @@
 package ca.ece.ubc.cpen221.mp5;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.json.simple.JSONObject;
 
 // TODO: Use this class to represent a Yelp review.
 
@@ -14,14 +17,16 @@ public class Review {
      int stars;
      String date;
   
+     private JSONObject reviewObject;
     
-     public Review ( String businessID,
+     public Review (String businessID,
                     String userID,
                     Object votes,
                     String reviewID,
                     String text,
                     int stars,
-                    String date){
+                    String date,
+                    JSONObject reviewObject){
          
          this.businessID = businessID;
          this.userID = userID;
@@ -30,6 +35,8 @@ public class Review {
          this.text = text;
          this.stars = stars;
          this.date = date;
+         
+         this.reviewObject = reviewObject;
             
      }
      
@@ -42,6 +49,10 @@ public class Review {
      }
      public String getBusinessID(){
          return this.businessID;
+     }
+     
+     public String representationInJSON() throws IOException {
+         return reviewObject.toJSONString();
      }
      
      @Override

@@ -70,7 +70,7 @@ public class Algorithms {
 
         while (again) {
             // initialize the k nodes at "random" positions within the max and
-            // minimum coordinates
+            // minimum coordinates . This algorithm makes sure each node begins with at least one restaurant.
 
             allClusters.clear();
             kNodes.clear();
@@ -107,7 +107,7 @@ public class Algorithms {
             
             for (int i = 0; i < k; i++){//if all the nodes are the centroids of their respective clusters.
                 
-                if(!kNodes.get(i).equals(computeCentroidOfRestaurants(allClusters.get(i)))){
+                if(!allClusters.get(i).isEmpty() && !kNodes.get(i).equals(computeCentroidOfRestaurants(allClusters.get(i)))){
                     calibrating = true;
                     break;
                 }
@@ -121,11 +121,14 @@ public class Algorithms {
             // recompute the location of the nodes as the centroid.
             for (int i = 0; i < k; i++) {
                 
-                Coordinate newCentroid = computeCentroidOfRestaurants(allClusters.get(i));
+                if (!allClusters.get(i).isEmpty()){
+                    Coordinate newCentroid = computeCentroidOfRestaurants(allClusters.get(i));
+                    
+                    kNodes.remove(i);
+                    
+                    kNodes.add(i, newCentroid);
+                }
                 
-                kNodes.remove(i);
-                
-                kNodes.add(i, newCentroid);
                 System.out.println(kNodes.get(i).xCoord + " , " + kNodes.get(i).yCoord);
 
             }

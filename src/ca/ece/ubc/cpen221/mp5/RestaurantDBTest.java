@@ -14,6 +14,6 @@ public class RestaurantDBTest {
         db.getRestaurantList();
         System.out.print(db.toString());
         
-        Algorithms.kMeansClustering(10,db);
+        Algorithms.kMeansClustering(5,db);
     }
 }

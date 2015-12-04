@@ -147,7 +147,7 @@ public class Restaurant {
         obj.put("stars", stars);
         obj.put("review_count", reviewCount);
         obj.put("price", price);
-
+        
         StringWriter out = new StringWriter();
         obj.writeJSONString(out);
         out.close();

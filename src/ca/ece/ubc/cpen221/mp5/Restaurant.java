@@ -136,29 +136,7 @@ public class Restaurant {
         
         return restaurantObject.toJSONString();
 
-        /*JSONObject obj = new JSONObject();
         
-        obj.put("url", url);
-        obj.put("photo_url", photoURL);
-        obj.put("longitude", coordinate.xCoord);
-        obj.put("latitude", coordinate.yCoord);
-        obj.put("city", city);
-        obj.put("full_address", fullAddress);
-        obj.put("neighborhoods", neighbourhoods);
-        obj.put("state", state);
-        obj.put("schools", schools);
-        obj.put("name", name);
-        obj.put("business_id", businessID);
-        obj.put("open", open);
-        obj.put("categories", categories);
-        obj.put("stars", stars);
-        obj.put("review_count", reviewCount);
-        obj.put("price", price);
-        
-        StringWriter out = new StringWriter();
-        obj.writeJSONString(out);
-        out.close();
-        return out.toString();*/
     }
     
     @Override

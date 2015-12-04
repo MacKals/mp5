@@ -1,7 +1,11 @@
 package ca.ece.ubc.cpen221.mp5.statlearning;
 
 import java.util.Set;
+
+import org.json.simple.JSONObject;
+
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -20,7 +24,7 @@ public class Algorithms {
      *            the RestaurantDB containing the restaurants we want to cluster
      * @return
      */
-    public static List<ArrayList<Restaurant>> kMeansClustering(int k, RestaurantDB db) {
+    public static List<Set<Restaurant>> kMeansClustering(int k, RestaurantDB db) {
 
         List<ArrayList<Restaurant>> allClusters = new ArrayList<ArrayList<Restaurant>>();
 
@@ -49,6 +53,7 @@ public class Algorithms {
                 minX = maxX;
                 maxY = restaurant.getLocation().yCoord;
                 minY = maxY;
+                
             }
 
             if (restaurant.getLocation().xCoord > maxX)
@@ -97,6 +102,7 @@ public class Algorithms {
             for (int i = 0; i < k; i++) {
                 if (allClusters.get(i).isEmpty()) {
                     again = true;
+                    break;
                 }
             }
         }
@@ -125,11 +131,15 @@ public class Algorithms {
             for (int i = 0; i < k; i++) {
                 
                 if (!allClusters.get(i).isEmpty()){
+                    
                     Coordinate newCentroid = computeCentroidOfRestaurants(allClusters.get(i));
                     
                     kNodes.remove(i);
                     
                     kNodes.add(i, newCentroid);
+                    
+                } else {
+                    System.out.println("node " + i + " lost its neighbours!");
                 }
                 
                 System.out.println(kNodes.get(i).xCoord + " , " + kNodes.get(i).yCoord);
@@ -154,12 +164,24 @@ public class Algorithms {
             counter++;
 
         }
-
-        return allClusters;
+        
+        List<Set<Restaurant>> returnList = new ArrayList<Set<Restaurant>>();
+        
+        
+        for (int i = 0; i < k; i++){
+            
+            returnList.add(new HashSet<Restaurant>());
+            
+            for (Restaurant restaurant : allClusters.get(i)){
+                returnList.get(i).add(restaurant);
+            }
+        }
+        
+        return returnList;
     }
 
     /**
-     * Converts a list of restaurant clusters to JSON format.
+     * Converts a list of restaurant clusters to JSON format, in the specific format in voronoi.json
      * 
      * @param clusters
      *            a list of n sets, where each set represents a cluster of
@@ -168,22 +190,40 @@ public class Algorithms {
      *         clustering
      */
     public static String convertClustersToJSON(List<Set<Restaurant>> clusters) {
+        
         String theString = new String();
-        try {
-
-            for (Set<Restaurant> set : clusters) {
-                for (Restaurant restaurant : set) {
-
-                    theString += restaurant.representationInJSON();
-
+        theString += "[";
+        
+        
+        
+        for (int i = 0; i < clusters.size(); i++){
+            int counter = 0;
+            
+            for (Restaurant restaurant : clusters.get(i)){
+                
+                if (counter != 0){
+                    theString += ",";
                 }
+                
+                JSONObject obj = new JSONObject();
+                
+                obj.put("x",  restaurant.getLocation().xCoord);
+                obj.put("y",  restaurant.getLocation().yCoord);
+                obj.put("name",  restaurant.getName());
+                obj.put("cluster",  (i+1));
+                obj.put("weight",  1.0 );
+                
+                theString += obj.toString();
+                counter++;
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            
+            
         }
-
+        
+        theString += "]";
+        
         return theString;
+
     }
 
     /**

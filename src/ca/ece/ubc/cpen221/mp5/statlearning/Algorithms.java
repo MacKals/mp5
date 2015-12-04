@@ -4,6 +4,7 @@ import java.util.Set;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import ca.ece.ubc.cpen221.mp5.*;
 
@@ -19,89 +20,138 @@ public class Algorithms {
      *            the RestaurantDB containing the restaurants we want to cluster
      * @return
      */
-    public static List<Set<Restaurant>> kMeansClustering(int k, RestaurantDB db) {
+    public static List<ArrayList<Restaurant>> kMeansClustering(int k, RestaurantDB db) {
 
-        List<Set<Restaurant>> allClusters = new ArrayList<Set<Restaurant>>();
+        List<ArrayList<Restaurant>> allClusters = new ArrayList<ArrayList<Restaurant>>();
 
         List<Coordinate> kNodes = new ArrayList<Coordinate>();
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
 
         boolean calibrating = true;
+        boolean again = true;
+        int counter = 1;
 
         double maxX = 0;
         double minX = 0;
         double maxY = 0;
         double minY = 0;
 
-        for (Object restaurant : db.getRestaurantList()) { // add all
-                                                           // restaurants to a
-                                                           // list. Attain min
-                                                           // and max
-                                                           // latitudes/longitudes.
+        for (Restaurant restaurant : db.getRestaurantList()) { // add all
+            // restaurants to a
+            // list. Attain min
+            // and max
+            // latitudes/longitudes.
 
-            if (restaurant instanceof Restaurant) {
-
-                if (((Restaurant) restaurant).getLocation().xCoord > maxX)
-                    maxX = ((Restaurant) restaurant).getLocation().xCoord;
-
-                if (((Restaurant) restaurant).getLocation().xCoord < minX)
-                    minX = ((Restaurant) restaurant).getLocation().xCoord;
-
-                if (((Restaurant) restaurant).getLocation().yCoord > maxY)
-                    maxY = ((Restaurant) restaurant).getLocation().yCoord;
-
-                if (((Restaurant) restaurant).getLocation().yCoord < minY)
-                    minY = ((Restaurant) restaurant).getLocation().yCoord;
-
-                restaurants.add((Restaurant) restaurant); // internal list of
-                                                          // restaurants;
+            if (db.getRestaurantList().indexOf(restaurant) == 0) { // set the
+                                                                   // initial
+                                                                   // values.
+                maxX = restaurant.getLocation().xCoord;
+                minX = maxX;
+                maxY = restaurant.getLocation().yCoord;
+                minY = maxY;
             }
 
+            if (restaurant.getLocation().xCoord > maxX)
+                maxX = (restaurant).getLocation().xCoord;
+
+            if (restaurant.getLocation().xCoord < minX)
+                minX = (restaurant).getLocation().xCoord;
+
+            if (restaurant.getLocation().yCoord > maxY)
+                maxY = (restaurant).getLocation().yCoord;
+
+            if (restaurant.getLocation().yCoord < minY)
+                minY = (restaurant.getLocation().yCoord);
+
+            restaurants.add((Restaurant) restaurant); // internal list of
+                                                      // restaurants;
+
         }
 
-        // initialize the k nodes at "random" positions within the max and
-        // minimum coordinates
-        for (int i = 0; i < k; i++) {
-            kNodes.add(new Coordinate(Math.random() * (maxX - minX) + minX, Math.random() * (maxY - minY) + minY));
+        while (again) {
+            // initialize the k nodes at "random" positions within the max and
+            // minimum coordinates . This algorithm makes sure each node begins with at least one restaurant.
+
+            allClusters.clear();
+            kNodes.clear();
+
+            for (int i = 0; i < k; i++) {
+                kNodes.add(new Coordinate(Math.random() * (maxX - minX) + minX, Math.random() * (maxY - minY) + minY));
+            }
+
+            for (int i = 0; i < k; i++) {
+                allClusters.add(new ArrayList<Restaurant>());
+            }
+
+            // assign all restaurants to a kNode
+            for (Restaurant restaurant : restaurants) {
+
+                allClusters.get(restaurant.getLocation().findClosestNeighbour(kNodes)).add(restaurant);
+
+            }
+
+            // we need to make sure that all nodes have an associated
+            // restaurant.
+            again = false;
+
+            for (int i = 0; i < k; i++) {
+                if (allClusters.get(i).isEmpty()) {
+                    again = true;
+                }
+            }
         }
         
-        for(int i = 0; i< k; i++){
-            allClusters.add(new HashSet<Restaurant>());
-        }
-        
-        // assign all restaurants to a kNode
-        for (Restaurant restaurant : restaurants) {
-
-            allClusters.get( restaurant.getLocation().findClosestNeighbour(kNodes) ).add(restaurant);
-
-        }
+        //enter the calibration stage.
 
         while (calibrating) {
+
             calibrating = false;
-            // recompute the location of the nodes as the centroid.
-            for (Coordinate node : kNodes) {
-
-                int index = kNodes.indexOf(node);
-                kNodes.remove(index);
-
-                if (!node.equals(computeCentroidOfRestaurants(allClusters.get(index)))) {
+            
+            for (int i = 0; i < k; i++){//if all the nodes are the centroids of their respective clusters.
+                
+                if(!allClusters.get(i).isEmpty() && !kNodes.get(i).equals(computeCentroidOfRestaurants(allClusters.get(i)))){
                     calibrating = true;
+                    break;
                 }
+            }
+            
+            if (!calibrating) break;
+                
+            System.out.println("Calibrating... take " + counter);
 
-                kNodes.add(index, computeCentroidOfRestaurants(allClusters.get(index)));
+
+            // recompute the location of the nodes as the centroid.
+            
+            for (int i = 0; i < k; i++) {
+                
+                if (!allClusters.get(i).isEmpty()){
+                    Coordinate newCentroid = computeCentroidOfRestaurants(allClusters.get(i));
+                    
+                    kNodes.remove(i);
+                    
+                    kNodes.add(i, newCentroid);
+                }
+                
+                System.out.println(kNodes.get(i).xCoord + " , " + kNodes.get(i).yCoord);
+
             }
 
-            if (!calibrating)
-                break;
+           
 
             // reassign all restaurants to the kNodes
             allClusters.clear();
+
+            for (int i = 0; i < k; i++) {
+                allClusters.add(new ArrayList<Restaurant>());
+            }
 
             for (Restaurant restaurant : restaurants) {
 
                 allClusters.get(restaurant.getLocation().findClosestNeighbour(kNodes)).add(restaurant);
 
             }
+
+            counter++;
 
         }
 
@@ -120,7 +170,7 @@ public class Algorithms {
     public static String convertClustersToJSON(List<Set<Restaurant>> clusters) {
         String theString = new String();
         try {
-            
+
             for (Set<Restaurant> set : clusters) {
                 for (Restaurant restaurant : set) {
 
@@ -132,7 +182,7 @@ public class Algorithms {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         return theString;
     }
 
@@ -278,12 +328,12 @@ public class Algorithms {
      * of all the restaurants in the set.
      * 
      * @param coordinates
-     *            set of Restaurants
+     *            set of Restaurants. Must contain at least one coordinate.
      * @return a Coordinate that corresponds to the centroid of the cluster of
      *         restaurants
      * 
      */
-    private static Coordinate computeCentroidOfRestaurants(Set<Restaurant> coordinates) {
+    private static Coordinate computeCentroidOfRestaurants(List<Restaurant> coordinates) {
 
         double newX = 0;
         double newY = 0;

@@ -90,7 +90,6 @@ public class RestaurantDB {
 
                 } else if (fileKind == FileKind.User) {
                     addUser(fileEntries.next());
-
                 }
             }
         } catch (Exception e) {
@@ -186,7 +185,7 @@ public class RestaurantDB {
             
             User newUser = new User((String) user.get("url"), (Object) user.get("votes"),
                     RestaurantDB.safeLongToInt((long) user.get("review_count")), (String) user.get("user_id"),
-                    (String) user.get("name"), (double) user.get("average_stars"));
+                    (String) user.get("name"), (double) user.get("average_stars"), user);
             
             //Check weather exists already
             if (initComplete) {
@@ -224,7 +223,7 @@ public class RestaurantDB {
 
             Review newReview = new Review((String) review.get("business_id"), (String) review.get("user_id"),
                     (Object) review.get("votes"), (String) review.get("review_id"), (String) review.get("text"),
-                    RestaurantDB.safeLongToInt((long) review.get("stars")), (String) review.get("date"));
+                    RestaurantDB.safeLongToInt((long) review.get("stars")), (String) review.get("date"), review);
 
             //Check for duplication
             if (initComplete) {

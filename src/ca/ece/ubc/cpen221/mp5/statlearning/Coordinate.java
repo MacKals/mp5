@@ -39,8 +39,13 @@ public class Coordinate {
     public boolean equals(Object coordinate){
         
         if (coordinate instanceof Coordinate){
-            if (((Coordinate) coordinate).xCoord == this.xCoord && ((Coordinate) coordinate).yCoord == this.yCoord) {
-                return true;
+            
+            if (((Coordinate) coordinate).xCoord <= this.xCoord +0.00001 && ((Coordinate) coordinate).xCoord >= this.xCoord - 0.00001 ){
+                
+                    if (((Coordinate) coordinate).yCoord <= this.yCoord + 00001 && ((Coordinate) coordinate).yCoord >= this.yCoord - 00001) {
+                        return true;
+                    }
+                
             }
         }
         return false;

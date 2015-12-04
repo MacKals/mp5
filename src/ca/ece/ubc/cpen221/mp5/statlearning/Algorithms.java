@@ -4,6 +4,7 @@ import java.util.Set;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import ca.ece.ubc.cpen221.mp5.*;
 
@@ -19,9 +20,9 @@ public class Algorithms {
      *            the RestaurantDB containing the restaurants we want to cluster
      * @return
      */
-    public static List<Set<Restaurant>> kMeansClustering(int k, RestaurantDB db) {
+    public static List<ArrayList<Restaurant>> kMeansClustering(int k, RestaurantDB db) {
 
-        List<Set<Restaurant>> allClusters = new ArrayList<Set<Restaurant>>();
+        List<ArrayList<Restaurant>> allClusters = new ArrayList<ArrayList<Restaurant>>();
 
         List<Coordinate> kNodes = new ArrayList<Coordinate>();
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
@@ -67,7 +68,7 @@ public class Algorithms {
         }
         
         for(int i = 0; i< k; i++){
-            allClusters.add(new HashSet<Restaurant>());
+            allClusters.add(new ArrayList<Restaurant>());
         }
         
         // assign all restaurants to a kNode
@@ -87,7 +88,8 @@ public class Algorithms {
             for (int i = 0; i < kNodes.size(); i++) {
                 
                 kNodes.remove(i);
-                kNodes.add( i, computeCentroidOfRestaurants(allClusters.get(i)) );
+                kNodes.add( i, computeCentroidOfRestaurants(allClusters.get(i)));
+                System.out.println(kNodes.get(i).xCoord);
                 
                 if (!kNodes.get(i).equals(computeCentroidOfRestaurants(allClusters.get(i)))) {
                     calibrating = true;
@@ -103,7 +105,7 @@ public class Algorithms {
             allClusters.clear();
             
             for(int i = 0; i< k; i++){
-                allClusters.add(new HashSet<Restaurant>());
+                allClusters.add(new ArrayList<Restaurant>());
             }
 
             for (Restaurant restaurant : restaurants) {
@@ -115,6 +117,8 @@ public class Algorithms {
             counter++;
 
         }
+        
+        
 
         return allClusters;
     }
@@ -294,7 +298,7 @@ public class Algorithms {
      *         restaurants
      * 
      */
-    private static Coordinate computeCentroidOfRestaurants(Set<Restaurant> coordinates) {
+    private static Coordinate computeCentroidOfRestaurants(List<Restaurant> coordinates) {
 
         double newX = 0;
         double newY = 0;

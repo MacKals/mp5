@@ -80,7 +80,12 @@ public class RestaurantDBServer {
 
                 for (Review review : db.getReviewList()) {
                     if (review.businessID.equals(restaurantID)) {
-                        return "";
+                        try {
+                            return review.representationInJSON();
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

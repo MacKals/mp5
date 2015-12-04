@@ -78,6 +78,8 @@ public class Restaurant {
         this.price = price;
         
         this.coordinate = new Coordinate(latitude, longitude);
+        
+        this.restaurantObject = restaurantObject;
       
     }
     

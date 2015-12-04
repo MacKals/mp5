@@ -15,7 +15,7 @@ import java.util.Iterator;
 // state the rep invariant and the abstraction function.
 
 public class RestaurantDB {
-
+    
     private ArrayList<Restaurant> restaurants = new ArrayList<>();
     private ArrayList<Review> reviews = new ArrayList<>();
     private ArrayList<User> users = new ArrayList<>();

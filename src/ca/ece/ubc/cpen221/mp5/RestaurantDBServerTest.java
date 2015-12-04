@@ -20,7 +20,7 @@ public class RestaurantDBServerTest {
         }
     }
     
-    @Test
+//    @Test
     public void testRandomReview() {
         
         System.out.println(server.randomReview("La Val's Pizza"));
@@ -34,7 +34,7 @@ public class RestaurantDBServerTest {
         
     }
     
-    @Test
+//    @Test
     public void testAddRestaurant() {
         
         System.out.println(server.addRestaurant("La Val's Pizza"));
@@ -42,19 +42,19 @@ public class RestaurantDBServerTest {
         
     }
     
-    @Test
+//    @Test
     public void testAddUser() {
         
         
     }
     
-    @Test
+//    @Test
     public void testAddReview() {
         
         
     }
     
-    @Test
+//    @Test
     public void testSearchQuery() {
         System.out.println(server.query("price(1..2)"));
     }

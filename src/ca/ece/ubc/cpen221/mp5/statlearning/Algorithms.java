@@ -53,7 +53,7 @@ public class Algorithms {
                 minX = maxX;
                 maxY = restaurant.getLocation().yCoord;
                 minY = maxY;
-                
+
             }
 
             if (restaurant.getLocation().xCoord > maxX)
@@ -75,7 +75,8 @@ public class Algorithms {
 
         while (again) {
             // initialize the k nodes at "random" positions within the max and
-            // minimum coordinates . This algorithm makes sure each node begins with at least one restaurant.
+            // minimum coordinates . This algorithm makes sure each node begins
+            // with at least one restaurant.
 
             allClusters.clear();
             kNodes.clear();
@@ -106,47 +107,50 @@ public class Algorithms {
                 }
             }
         }
-        
-        //enter the calibration stage.
+        for (int i = 0; i < k; i++) {
+            System.out.println(kNodes.get(i).xCoord + " , " + kNodes.get(i).yCoord);
+        }
+
+        // enter the calibration stage.
 
         while (calibrating) {
 
             calibrating = false;
-            
-            for (int i = 0; i < k; i++){//if all the nodes are the centroids of their respective clusters.
-                
-                if(!allClusters.get(i).isEmpty() && !kNodes.get(i).equals(computeCentroidOfRestaurants(allClusters.get(i)))){
+
+            for (int i = 0; i < k; i++) {// if all the nodes are the centroids
+                                         // of their respective clusters.
+
+                if (!allClusters.get(i).isEmpty()
+                        && !kNodes.get(i).equals(computeCentroidOfRestaurants(allClusters.get(i)))) {
                     calibrating = true;
                     break;
                 }
             }
-            
-            if (!calibrating) break;
-                
+
+            if (!calibrating)
+                break;
+
             System.out.println("Calibrating... take " + counter);
 
-
             // recompute the location of the nodes as the centroid.
-            
+
             for (int i = 0; i < k; i++) {
-                
-                if (!allClusters.get(i).isEmpty()){
-                    
+
+                if (!allClusters.get(i).isEmpty()) {
+
                     Coordinate newCentroid = computeCentroidOfRestaurants(allClusters.get(i));
-                    
+
                     kNodes.remove(i);
-                    
+
                     kNodes.add(i, newCentroid);
-                    
+
                 } else {
                     System.out.println("node " + i + " lost its neighbours!");
                 }
-                
+
                 System.out.println(kNodes.get(i).xCoord + " , " + kNodes.get(i).yCoord);
 
             }
-
-           
 
             // reassign all restaurants to the kNodes
             allClusters.clear();
@@ -164,24 +168,24 @@ public class Algorithms {
             counter++;
 
         }
-        
+
         List<Set<Restaurant>> returnList = new ArrayList<Set<Restaurant>>();
-        
-        
-        for (int i = 0; i < k; i++){
-            
+
+        for (int i = 0; i < k; i++) {
+
             returnList.add(new HashSet<Restaurant>());
-            
-            for (Restaurant restaurant : allClusters.get(i)){
+
+            for (Restaurant restaurant : allClusters.get(i)) {
                 returnList.get(i).add(restaurant);
             }
         }
-        
+
         return returnList;
     }
 
     /**
-     * Converts a list of restaurant clusters to JSON format, in the specific format in voronoi.json
+     * Converts a list of restaurant clusters to JSON format, in the specific
+     * format in voronoi.json
      * 
      * @param clusters
      *            a list of n sets, where each set represents a cluster of
@@ -190,22 +194,24 @@ public class Algorithms {
      *         clustering
      */
     public static String convertClustersToJSON(List<Set<Restaurant>> clusters) {
-        
+
         String theString = new String();
         theString += "[";
-        
-        
-        
-        for (int i = 0; i < clusters.size(); i++){
+
+        for (int i = 0; i < clusters.size(); i++) {
             int counter = 0;
+
             
             for (Restaurant restaurant : clusters.get(i)){
                 
                 if (counter != 0){
                     theString += ", ";
+
                 }
-                
+
                 JSONObject obj = new JSONObject();
+
+
                 
                 obj.put("x",  restaurant.getLocation().xCoord);
                 obj.put("y",  restaurant.getLocation().yCoord);
@@ -213,15 +219,15 @@ public class Algorithms {
                 obj.put("cluster",  i);
                 obj.put("weight",  1.0 );
                 
+
                 theString += obj.toString();
                 counter++;
             }
-            
-            
+
         }
-        
+
         theString += "]";
-        
+
         return theString;
 
     }
@@ -298,7 +304,7 @@ public class Algorithms {
      * @return an ArrayList containing 3 doubles, in the order R^2, a, b.
      */
     private static ArrayList<Double> computeRegressionCoefficients(MP5Function featureFunction, User u,
-            RestaurantDB db) { // list of r_squared, a ,b in that order
+            RestaurantDB db) {
 
         double sumOfInput = 0;
         double sumOfOutput = 0;
@@ -309,27 +315,27 @@ public class Algorithms {
         double meanInput;
         double meanOutput;
 
-        for (Object review : db.getReviewList()) { // loop through all reviews
+        for (Review review : db.getReviewList()) { // loop through all reviews
                                                    // to find the review from a
                                                    // particular user
 
             if (review instanceof Review) {
 
-                if (((Review) review).getUserID().equals(u.getUserID())) { // this
-                                                                           // review
-                                                                           // was
-                                                                           // written
-                                                                           // by
-                                                                           // user
-                                                                           // U
+                if (review.getUserID().equals(u.getUserID())) { // this
+                                                                // review
+                                                                // was
+                                                                // written
+                                                                // by
+                                                                // user
+                                                                // U
 
                     // find the associated restaurant
-                    for (Object restaurant : db.getRestaurantList()) {
-                        if (restaurant instanceof Restaurant && ((Restaurant) restaurant).getBusinessID()
-                                .equals(((Review) review).getBusinessID())) {
+                    for (Restaurant restaurant : db.getRestaurantList()) {
+                        
+                        if (restaurant.getBusinessID().equals(review.getBusinessID())) {
 
-                            sumOfInput += featureFunction.f((Restaurant) restaurant, db);
-                            sumOfOutput += ((Review) review).getStars();
+                            sumOfInput += featureFunction.f(restaurant, db);
+                            sumOfOutput += review.getStars();
                             numDataPairs++;
                             break;
 

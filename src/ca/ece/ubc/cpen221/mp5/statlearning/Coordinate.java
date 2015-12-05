@@ -15,7 +15,7 @@ public class Coordinate {
     }
     
     public double computeDistance (double x, double y){      
-        return Math.sqrt( Math.pow((xCoord-x), 2) + Math.pow((yCoord-y), 2) );
+        return Math.sqrt( Math.pow((this.xCoord-x), 2) + Math.pow((this.yCoord-y), 2) );
     }
     
     //returns the index within the list of the closest coordinate
@@ -23,11 +23,15 @@ public class Coordinate {
         
         int indexClosest = 0;
         double closestDistance = coordList.get(0).computeDistance(this.xCoord, this.yCoord);
+        //System.out.println("distance" + closestDistance);
+        
         
         for (Coordinate coordinate : coordList){
             
             if (coordinate.computeDistance(this.xCoord, this.yCoord) < closestDistance){
                 indexClosest = coordList.indexOf(coordinate);
+                closestDistance = coordinate.computeDistance(this.xCoord, this.yCoord);
+                //System.out.println("index" + indexClosest);
             }
             
         }

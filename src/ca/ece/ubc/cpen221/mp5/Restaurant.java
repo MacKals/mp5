@@ -127,6 +127,10 @@ public class Restaurant {
         return this.businessID;
     }
     
+    public ArrayList<String> getCategories(){
+        return this.categories;
+    }
+    
     public Restaurant copy() {
         return new Restaurant(this);
     }

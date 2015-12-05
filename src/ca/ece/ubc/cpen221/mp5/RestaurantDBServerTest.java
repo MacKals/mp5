@@ -20,7 +20,7 @@ public class RestaurantDBServerTest {
         }
     }
     
-//    @Test
+    @Test
     public void testRandomReview() {
         
         System.out.println(server.randomReview("La Val's Pizza"));
@@ -37,7 +37,7 @@ public class RestaurantDBServerTest {
 //    @Test
     public void testAddRestaurant() {
         
-        System.out.println(server.addRestaurant("La Val's Pizza"));
+//        System.out.println(server.addRestaurant("La Val's Pizza"));
 
         
     }
@@ -51,11 +51,17 @@ public class RestaurantDBServerTest {
 //    @Test
     public void testAddReview() {
         
-        
+//        price:      PRICE       LP INT RP; 
+
     }
     
-//    @Test
+    @Test
     public void testSearchQuery() {
-        System.out.println(server.query("price(1..2)"));
+        System.out.println(server.query("1"));
+        System.out.println(server.query("name(\"Italian\")"));
+        System.out.println(server.query("in(test)"));
+        
+//"in("Telegraph Ave") && (category("Chinese") || category("Italian")) && price(1..2)
+        
     }
 }

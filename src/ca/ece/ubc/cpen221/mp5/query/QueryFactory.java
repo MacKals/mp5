@@ -31,7 +31,7 @@ public class QueryFactory {
         parser.reportErrorsAsExceptions();
 
         // Generate the parse tree using the starter rule.
-        ParseTree tree = parser.orExpression(); // "root" is the starter rule.
+        ParseTree tree = parser.price(); // "root" is the starter rule.
 
         // debugging option #1: print the tree to the console
         // System.err.println(tree.toStringTree(parser));

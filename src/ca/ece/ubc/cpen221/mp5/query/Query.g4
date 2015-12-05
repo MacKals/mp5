@@ -25,28 +25,45 @@ package ca.ece.ubc.cpen221.mp5.query;
     }
 }
 
-orExpression: 	andExpression (OR andExpression)* ;
-andExpression: 	atom (AND atom)* ;
+file: expression EOF;
 
-atom: 		location | location | name | rating | price;
+expression: ( LP logicExpression RP ) | ( atom );
 
-location: 	'in' 		LP STRING RP;
-category: 	'category' 	LP STRING RP;
-name: 		'name' 		LP STRING RP;
-rating: 	'rating' 	LP range RP;
-price: 		'price' 	LP range RP; 
+logicExpression: andExpression | orExpression | expression;
 
-range: 		START '..' END;
+andExpression: expression AND expression;
+orExpression: expression OR expression;
+
+atom: 		location | category | name | rating | price;
+
+location: 	IN 			LP string RP;
+category: 	CATEGORY 	LP string RP;
+name: 		NAME 		LP string RP;
+rating: 	RATING		LP range RP;
+price: 		INT; 
+
+INT: 		[1-5];
+
+IN:			'in';
+CATEGORY:	'category';
+NAME:		'name';
+RATING:		'rating';
+PRICE: 		'price';
+
+range: 		START '..' END ;
+string: 	QUOTE STRING QUOTE;
+
+OR: 		'||';
+AND:		'&&';
 
 START:		[1-5] ;
 END:		[1-5] ;
 STRING: 	~[<>]+ ;
 
-OR: 	'||';
-AND:	'&&';
+LP: 		'(';
+RP: 		')';
 
-LP: 	'(';
-RP: 	')';
+QUOTE: 		'"';
 
 WHITESPACE: [ \t\r\n]+ -> skip ;
 

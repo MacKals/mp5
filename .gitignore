@@ -3,6 +3,7 @@
 *.DS_Store
 *.project
 *.classpath
+voronoi.json
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

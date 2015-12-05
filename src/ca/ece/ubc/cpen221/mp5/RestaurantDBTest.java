@@ -29,7 +29,6 @@ public class RestaurantDBTest {
         out.write(testString);
         out.close();
         
-        
     }
     
     

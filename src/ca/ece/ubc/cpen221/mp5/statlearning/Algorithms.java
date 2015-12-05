@@ -201,19 +201,24 @@ public class Algorithms {
         for (int i = 0; i < clusters.size(); i++) {
             int counter = 0;
 
-            for (Restaurant restaurant : clusters.get(i)) {
+            
+            for (Restaurant restaurant : clusters.get(i)){
+                
+                if (counter != 0){
+                    theString += ", ";
 
-                if (counter != 0) {
-                    theString += ",";
                 }
 
                 JSONObject obj = new JSONObject();
 
-                obj.put("x", restaurant.getLocation().xCoord);
-                obj.put("y", restaurant.getLocation().yCoord);
-                obj.put("name", restaurant.getName());
-                obj.put("cluster", (i + 1));
-                obj.put("weight", 1.0);
+
+                
+                obj.put("x",  restaurant.getLocation().xCoord);
+                obj.put("y",  restaurant.getLocation().yCoord);
+                obj.put("name",  restaurant.getName());
+                obj.put("cluster",  i);
+                obj.put("weight",  1.0 );
+                
 
                 theString += obj.toString();
                 counter++;

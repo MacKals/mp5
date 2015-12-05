@@ -36,8 +36,7 @@ public class Review {
          this.stars = stars;
          this.date = date;
          
-         this.reviewObject = reviewObject;
-            
+         this.reviewObject = reviewObject;      
      }
      
      public String getUserID(){

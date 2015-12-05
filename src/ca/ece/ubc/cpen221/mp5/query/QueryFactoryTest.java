@@ -8,11 +8,14 @@ public class QueryFactoryTest {
 
     @Test
     public void testLiterals() {
-        assertTrue(false);
-        
-        
-                //FormulaFactory.parse("T").evaluate());
+        QueryFactory.parse("price(1..2)");
+        QueryFactory.parse("rating(1..2)");
+        QueryFactory.parse("rating(1..2)&&price(1..4)");
+        QueryFactory.parse("name(\"resturant\")");
+        QueryFactory.parse("category(\"Cafe\")");
 
     }
-
 }
+
+//STRING:     ~[<>]+ ;
+//TODO:fix spaces?

@@ -34,4 +34,9 @@ public class NodePrice implements Query {
         return result;
     }
 
+    @Override
+    public String stringRepresentation() {
+        return "price: " + lowerPrice + "..." + higherPrice;
+    }
+
 }

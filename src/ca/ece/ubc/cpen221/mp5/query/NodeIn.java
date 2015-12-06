@@ -33,4 +33,9 @@ public class NodeIn implements Query {
         return result;
     }
 
+    @Override
+    public String stringRepresentation() {
+        return "in: " + locationName;
+    }
+
 }

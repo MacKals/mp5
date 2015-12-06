@@ -41,12 +41,12 @@ RATING:		'rating';
 PRICE: 		'price';
 
 INT:		[1-5] ;
-STRING: 	(('A'..'Z')|('a'..'z') | ' ')+ ;
+STRING: 	(('A'..'Z')|('a'..'z')) (('A'..'Z')|('a'..'z')| ' ')*  ;
 
-WHITESPACE: [ \t\r\n]+ -> skip ;
+WS :		( ' ' | '\t' | '\r' | '\n' ) -> skip ;
 
 
-file: orExpression EOF;
+file:			 	orExpression EOF;
 
 orExpression:  		andExpression (OR andExpression)*;
 
@@ -60,5 +60,5 @@ name: 		NAME 		LP string RP;
 rating: 	RATING		LP range RP;
 price:      PRICE       LP range RP; 
 
-range: 		INT DOTDOT INT ;
+range: 		INT DOTDOT INT;
 string: 	QUOTE STRING QUOTE;

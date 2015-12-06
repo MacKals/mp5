@@ -31,4 +31,9 @@ public class NodeCategory implements Query {
 
         return result;
     }
+
+    @Override
+    public String stringRepresentation() {
+        return "cathegory: " + cathegory;
+    }
 }

@@ -20,7 +20,14 @@ public class RegressionFunction implements MP5Function {
     @Override
     public double f(Restaurant yelpRestaurant, RestaurantDB db) {
         
-        return ((a* featureFunction.f(yelpRestaurant, db)) + b);
+        double prediction = (b* featureFunction.f(yelpRestaurant, db)) + a;
+        if (prediction < 0.0){
+            prediction = 0.0;
+        } else if (prediction > 5.0){
+            prediction = 5.0;
+        }
+        
+        return prediction;
     }
 
 }

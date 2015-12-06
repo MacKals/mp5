@@ -54,19 +54,34 @@ public class AlgorithmsTest {
             }
               
         }
-        
-      //check that no restaurant appears twice in list set
    
         
     }
     
     @Test
     public void testCentroid(){
+        //compute the centroid of 3 points
         
+        ArrayList<Restaurant> coordList = new ArrayList<>();
+        RestaurantDB db = new RestaurantDB("restaurants.json", "reviews.json", "users.json");
+                
+        for (int i = 0; i < 3; i++){
+             coordList.add(db.getRestaurantList().get(i));
+        }
+        System.out.println(Algorithms.computeCentroidOfRestaurants(coordList).xCoord + " , " + Algorithms.computeCentroidOfRestaurants(coordList).yCoord);
+        assert(Algorithms.computeCentroidOfRestaurants(coordList).equals(new Coordinate(37.86909917 , -122.2598820)));
     }
      
     @Test
     public void testGetPredictor(){
+        
+        RestaurantDB db = new RestaurantDB("restaurants.json", "reviews.json", "users.json");
+        MP5Function price = new RestaurantPriceScale();
+        MP5Function returnedFunction1 = Algorithms.getPredictor(db.getUserList().get(8), db, price);
+        
+        double prediction = returnedFunction1.f(db.getRestaurantList().get(12), db);
+        
+        System.out.println("I predict user 8 will give restaurant 0 a rating of " + prediction + " stars");
         
     }
     

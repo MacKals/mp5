@@ -107,9 +107,6 @@ public class Algorithms {
                 }
             }
         }
-        for (int i = 0; i < k; i++) {
-            System.out.println(kNodes.get(i).xCoord + " , " + kNodes.get(i).yCoord);
-        }
 
         // enter the calibration stage.
 
@@ -130,7 +127,7 @@ public class Algorithms {
             if (!calibrating)
                 break;
 
-            System.out.println("Calibrating... take " + counter);
+            //System.out.println("Calibrating... take " + counter);
 
             // recompute the location of the nodes as the centroid.
 
@@ -145,10 +142,10 @@ public class Algorithms {
                     kNodes.add(i, newCentroid);
 
                 } else {
-                    System.out.println("node " + i + " lost its neighbours!");
+                    //System.out.println("node " + i + " lost its neighbours!");
                 }
 
-                System.out.println(kNodes.get(i).xCoord + " , " + kNodes.get(i).yCoord);
+                //System.out.println(kNodes.get(i).xCoord + " , " + kNodes.get(i).yCoord);
 
             }
 
@@ -335,7 +332,9 @@ public class Algorithms {
                         if (restaurant.getBusinessID().equals(review.getBusinessID())) {
 
                             sumOfInput += featureFunction.f(restaurant, db);
+                            inputs.add(featureFunction.f(restaurant, db));
                             sumOfOutput += review.getStars();
+                            outputs.add(review.getStars() +0.0);
                             numDataPairs++;
                             break;
 
@@ -357,12 +356,18 @@ public class Algorithms {
             syy += (outputs.get(i) - meanOutput) * (outputs.get(i) - meanOutput);
             sxy += (inputs.get(i) - meanInput) * (outputs.get(i) - meanOutput);
         }
-
-        double b = sxy / sxx;
+        
+        double b;
+        if (sxx > 0){
+            b = sxy / sxx;
+        } else {
+            b = 0; 
+        }
+        
 
         ArrayList<Double> returnList = new ArrayList<Double>();
         returnList.add((sxy * sxy) / (sxx * syy));
-        returnList.add(meanOutput - b * meanInput);
+        returnList.add(meanOutput - (b * meanInput));
         returnList.add(b);
 
         return returnList;
@@ -379,7 +384,7 @@ public class Algorithms {
      *         restaurants
      * 
      */
-    private static Coordinate computeCentroidOfRestaurants(List<Restaurant> coordinates) {
+    public static Coordinate computeCentroidOfRestaurants(List<Restaurant> coordinates) {
 
         double newX = 0;
         double newY = 0;

@@ -250,7 +250,7 @@ public class Algorithms {
         ArrayList<Double> regCoefficients = computeRegressionCoefficients(featureFunction, u, db);
 
         RegressionFunction returnFunction = new RegressionFunction(regCoefficients.get(1), regCoefficients.get(2),
-                featureFunction);
+                regCoefficients.get(0), featureFunction);
 
         return returnFunction;
     }
@@ -300,7 +300,7 @@ public class Algorithms {
      *            the RestaurantDB
      * @return an ArrayList containing 3 doubles, in the order R^2, a, b.
      */
-    private static ArrayList<Double> computeRegressionCoefficients(MP5Function featureFunction, User u,
+    public static ArrayList<Double> computeRegressionCoefficients(MP5Function featureFunction, User u,
             RestaurantDB db) {
 
         double sumOfInput = 0;

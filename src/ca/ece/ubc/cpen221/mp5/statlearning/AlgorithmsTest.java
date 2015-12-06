@@ -2,20 +2,14 @@ package ca.ece.ubc.cpen221.mp5.statlearning;
 
 import static org.junit.Assert.*;
 
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ca.ece.ubc.cpen221.mp5.Restaurant;
 import ca.ece.ubc.cpen221.mp5.RestaurantDB;
-import ca.ece.ubc.cpen221.mp5.User;
 
 public class AlgorithmsTest {
 

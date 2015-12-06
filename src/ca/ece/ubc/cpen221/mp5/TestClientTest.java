@@ -1,6 +1,6 @@
 package ca.ece.ubc.cpen221.mp5;
 
-import static org.junit.Assert.*;
+//import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.ArrayList;

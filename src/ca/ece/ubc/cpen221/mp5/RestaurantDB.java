@@ -8,11 +8,8 @@ import org.json.simple.parser.JSONParser;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
-
-//TODO:
-// Define the internal representation and 
-// state the rep invariant and the abstraction function.
 
 /**
  * 
@@ -32,15 +29,17 @@ import java.util.Iterator;
  * 
  * The AF for the db:
  * <ul>
- * <li>the db represents the data from the given dataset</li> //TODO: update
+ * <li>the db represents the data from the given dataset and the data added through client interaction</li>
  * </ul>
  *
  * Thread safety strategy:
  * <ul>
  * <li>methods accessing a list is synchronized on that list</li>
  * <li>thus no two methods can access the same list at the same time</li>
- * <li>There is no direct interdependence between lists, so they can be changed
+ * <li>there is no direct interdependence between lists, so they can be changed
  * independently of one another</li>
+ * <li>no pointers to lists are exposed, copies are made. All types contained in
+ * lists are immutable.</li>
  * </ul>
  *
  * @author MacLennan & Kals
@@ -98,12 +97,14 @@ public class RestaurantDB {
      * <li>locks on restaurants</li>
      * </ul>
      * 
-     * @return pointer to list of restaurants
+     * @return copy of list of restaurants
      */
-    public ArrayList<Restaurant> getRestaurantList() {
+    public synchronized ArrayList<Restaurant> getRestaurantList() {
+        ArrayList<Restaurant> returnList = new ArrayList<>();
         synchronized (restaurants) {
-            return restaurants;
+            Collections.copy(returnList, restaurants);
         }
+        return returnList;
     }
 
     /**
@@ -112,12 +113,14 @@ public class RestaurantDB {
      * <li>locks on reviews</li>
      * </ul>
      * 
-     * @return pointer to list of reviews
+     * @return copy of list of reviews
      */
-    public ArrayList<Review> getReviewList() {
+    public synchronized ArrayList<Review> getReviewList() {
+        ArrayList<Review> returnList = new ArrayList<>();
         synchronized (reviews) {
-            return reviews;
+            Collections.copy(returnList, reviews);
         }
+        return returnList;
     }
 
     /**
@@ -126,12 +129,14 @@ public class RestaurantDB {
      * <li>locks on users</li>
      * </ul>
      * 
-     * @return pointer to list of reviews
+     * @return copy of list of reviews
      */
-    public ArrayList<User> getUserList() {
+    public synchronized ArrayList<User> getUserList() {
+        ArrayList<User> returnList = new ArrayList<>();
         synchronized (users) {
-            return users;
+            Collections.copy(returnList, users);
         }
+        return returnList;
     }
 
     /**
@@ -140,12 +145,15 @@ public class RestaurantDB {
      * <li>locks on categories</li>
      * </ul>
      * 
-     * @return pointer to list of categories
+     * @return copy of list of categories
      */
     public ArrayList<String> getCategoryMapping() {
+
+        ArrayList<String> returnList = new ArrayList<>();
         synchronized (categories) {
-            return categories;
+            Collections.copy(returnList, categories);
         }
+        return returnList;
     }
 
     public enum FileKind {
@@ -166,7 +174,8 @@ public class RestaurantDB {
      *            The type of file we wish to add to our database
      * @return true if the objects were successfully added from the file.
      */
-    @SuppressWarnings("resource") // it is handled as pointer fileEntries is local to method
+    @SuppressWarnings("resource") // it is handled as pointer fileEntries is
+                                  // local to method
     private boolean addFromFile(String filename, FileKind fileKind) {
 
         try {
@@ -194,22 +203,25 @@ public class RestaurantDB {
 
     /**
      * Maps categories to corresponding doubles for regression
-     * @param inputCategories categories as strings
+     * 
+     * @param inputCategories
+     *            categories as strings
      * @return double representation on input-list
      */
     public ArrayList<Double> mapCategories(ArrayList<String> inputCategories) {
         ArrayList<Double> categoriesDoubles = new ArrayList<Double>();
 
-        for (int i = 0; i < inputCategories.size(); i++) {
-            categoriesDoubles.add(categories.indexOf(inputCategories.get(i)) + 0.0);
+        synchronized (categories) {
+            for (int i = 0; i < inputCategories.size(); i++) {
+                categoriesDoubles.add(categories.indexOf(inputCategories.get(i)) + 0.0);
+            }
         }
 
         return categoriesDoubles;
     }
 
     /**
-     * Adds a restaurant to the restaurantDB. 
-     * Thread safety argument:
+     * Adds a restaurant to the restaurantDB. Thread safety argument:
      * <ul>
      * <li>locks on restaurants when accessing it</li>
      * <li>locks on categories when accessing it</li>
@@ -230,13 +242,15 @@ public class RestaurantDB {
 
             Restaurant newRestaurant = new Restaurant(restaurant);
 
+            // Check for valid restaurant
+            if (newRestaurant.getBusinessID().isEmpty())
+                return ReturnMessages.malformedExpressionError;
+            if (newRestaurant.getName().isEmpty())
+                return ReturnMessages.malformedExpressionError;
+
             // accessing restaurants, lock on it:
             synchronized (restaurants) {
 
-                // Check for valid restaurant
-                if (newRestaurant.getBusinessID().isEmpty()) return ReturnMessages.malformedExpressionError;
-                if (newRestaurant.getName().isEmpty()) return ReturnMessages.malformedExpressionError;
-                
                 // Check for duplication
                 if (initComplete) {
                     for (Restaurant restaurantInstance : restaurants) {
@@ -251,8 +265,8 @@ public class RestaurantDB {
 
             // accessing categories, lock on it:
             synchronized (categories) {
-                
-                //add to categories if not there from before
+
+                // add to categories if not there from before
                 for (String element : newRestaurant.getCategories()) {
                     if (!categories.contains(element)) {
                         categories.add(element);
@@ -269,11 +283,11 @@ public class RestaurantDB {
     }
 
     /**
-     * Adds a user to the restaurantDB
-     * Thread safety argument:
+     * Adds a user to the restaurantDB Thread safety argument:
      * <ul>
      * <li>locks on users when accessing</li>
      * </ul>
+     * 
      * @param usertString
      *            a string in JSON format corresponding to a user in the Yelp
      *            database.
@@ -292,28 +306,29 @@ public class RestaurantDB {
 
             User newUser = new User(user);
 
-            //accessing users, lock on it
-            synchronized(users) {
+            // accessing users, lock on it
+            synchronized (users) {
 
                 // Check for valid user
-                if (newUser.getUserID().isEmpty()) return ReturnMessages.malformedExpressionError;
-                
+                if (newUser.getUserID().isEmpty())
+                    return ReturnMessages.malformedExpressionError;
+
                 // Check weather exists already
                 if (initComplete) {
-                    
+
                     for (User userInstance : users) {
                         if (userInstance.getUserID() == newUser.getUserID()) {
-                            // TODO:Search for duplication based on user id only -
+                            // TODO:Search for duplication based on user id only
+                            // -
                             // more needed?
                             return ReturnMessages.alreadyExistsError;
                         }
                     }
                 }
-                
+
                 users.add(newUser);
-                
+
             }
-           
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -324,11 +339,11 @@ public class RestaurantDB {
     }
 
     /**
-     * Adds a review to the restaurantDB
-     * Thread safety argument:
+     * Adds a review to the restaurantDB Thread safety argument:
      * <ul>
      * <li>locks on reviews when accessing</li>
      * </ul>
+     * 
      * @param reviewString
      *            a string in JSON format corresponding to a review in the Yelp
      *            database.
@@ -345,13 +360,13 @@ public class RestaurantDB {
                     (Object) review.get("votes"), (String) review.get("review_id"), (String) review.get("text"),
                     UtilityMethods.safeLongToInt((long) review.get("stars")), (String) review.get("date"), review);
 
-            synchronized(reviews) {
-                
+            // accessing reviews, lock on it
+            synchronized (reviews) {
 
                 // Check for valid review
-                if (newReview.getBusinessID().isEmpty()) return ReturnMessages.malformedExpressionError;
-                
-                
+                if (newReview.getBusinessID().isEmpty())
+                    return ReturnMessages.malformedExpressionError;
+
                 // Check for duplication
                 if (initComplete) {
                     for (Review reviewInstance : reviews) {
@@ -362,9 +377,9 @@ public class RestaurantDB {
                 }
 
                 reviews.add(newReview);
-                
+
             }
-            
+
         } catch (ParseException e) {
             e.printStackTrace();
             return ReturnMessages.malformedExpressionError;

@@ -2,19 +2,9 @@ package ca.ece.ubc.cpen221.mp5;
 
 import static org.junit.Assert.*;
 
-//import static org.junit.Assert.*;
-
-import java.io.FileWriter;
 import java.io.IOException;
-
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
-
-
 import org.junit.Test;
-
-import ca.ece.ubc.cpen221.mp5.statlearning.Algorithms;
 
 public class RestaurantDBTest {
 
@@ -52,11 +42,6 @@ public class RestaurantDBTest {
             for (int l = i+1; l < reviews.size(); l++){
                 if(reviews.get(i).equals(reviews.get(l))) fail("duplicate!");
             }
-        }
-        
-       
+        }  
     }
-    
-    
-
 }

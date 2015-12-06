@@ -30,8 +30,14 @@ public class Restaurant {
      * Constructs a new restaurant object with the data provided by Yelp.
      * @param restaurant
      */
-    public Restaurant ( JSONObject restaurant){
+    public Restaurant (JSONObject restaurant){
         this.restaurant = restaurant;
+    }
+    
+    public Restaurant copy(Restaurant toBeCopied) {
+        
+        JSONObject newRep = new JSONObject(toBeCopied.restaurant); 
+        return new Restaurant(newRep);
     }
     
     public Coordinate getLocation() {

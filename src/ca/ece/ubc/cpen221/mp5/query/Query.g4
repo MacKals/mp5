@@ -25,24 +25,14 @@ package ca.ece.ubc.cpen221.mp5.query;
     }
 }
 
-file: expression EOF;
+OR: 		'||';
+AND:		'&&';
 
-expression: ( LP logicExpression RP ) | ( atom );
+LP: 		'(';
+RP: 		')';
 
-logicExpression: andExpression | orExpression | expression;
-
-andExpression: expression AND expression;
-orExpression: expression OR expression;
-
-atom: 		location | category | name | rating | price;
-
-location: 	IN 			LP string RP;
-category: 	CATEGORY 	LP string RP;
-name: 		NAME 		LP string RP;
-rating: 	RATING		LP range RP;
-price: 		INT; 
-
-INT: 		[1-5];
+QUOTE: 		'"';
+DOTDOT: 	'..';
 
 IN:			'in';
 CATEGORY:	'category';
@@ -50,20 +40,25 @@ NAME:		'name';
 RATING:		'rating';
 PRICE: 		'price';
 
-range: 		START '..' END ;
-string: 	QUOTE STRING QUOTE;
-
-OR: 		'||';
-AND:		'&&';
-
-START:		[1-5] ;
-END:		[1-5] ;
-STRING: 	~[<>]+ ;
-
-LP: 		'(';
-RP: 		')';
-
-QUOTE: 		'"';
+INT:		[1-5] ;
+STRING: 	(('A'..'Z')|('a'..'z') | ' ')+ ;
 
 WHITESPACE: [ \t\r\n]+ -> skip ;
 
+
+file: orExpression EOF;
+
+orExpression:  		andExpression (OR andExpression)*;
+
+andExpression: 		atom (AND atom)*;
+
+atom: 		location | category | name | rating | price | (LP orExpression RP);
+
+location: 	IN 			LP string RP;
+category: 	CATEGORY 	LP string RP;
+name: 		NAME 		LP string RP;
+rating: 	RATING		LP range RP;
+price:      PRICE       LP range RP; 
+
+range: 		INT DOTDOT INT ;
+string: 	QUOTE STRING QUOTE;

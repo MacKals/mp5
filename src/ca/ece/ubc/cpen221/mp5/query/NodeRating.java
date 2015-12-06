@@ -35,4 +35,9 @@ public class NodeRating implements Query {
         return result;
     }
 
+    @Override
+    public String stringRepresentation() {
+        return "rating: " + lowerRating + "..." + higherRating;
+    }
+
 }

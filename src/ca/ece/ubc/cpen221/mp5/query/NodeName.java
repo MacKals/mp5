@@ -32,4 +32,9 @@ public class NodeName implements Query {
 
         return result;
     }
+
+    @Override
+    public String stringRepresentation() {
+        return "name: " + name;
+    }
 }

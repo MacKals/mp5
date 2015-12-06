@@ -19,4 +19,11 @@ public class NodeAnd implements Query {
     public Set<Restaurant> result(RestaurantDB db) {
         return Sets.intersection(firstNode.result(db), secondNode.result(db));
     }
+
+    @Override
+    public String stringRepresentation() {
+        return "(" + firstNode.stringRepresentation() + " && " + secondNode.stringRepresentation() + ")";
+    }
+    
+    
 }

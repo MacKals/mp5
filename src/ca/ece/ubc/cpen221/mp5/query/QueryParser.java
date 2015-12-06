@@ -20,10 +20,10 @@ public class QueryParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		OR=1, AND=2, LP=3, RP=4, QUOTE=5, DOTDOT=6, IN=7, CATEGORY=8, NAME=9, 
-		RATING=10, PRICE=11, INT=12, STRING=13, WHITESPACE=14;
+		RATING=10, PRICE=11, INT=12, STRING=13, WS=14;
 	public static final String[] tokenNames = {
 		"<INVALID>", "'||'", "'&&'", "'('", "')'", "'\"'", "'..'", "'in'", "'category'", 
-		"'name'", "'rating'", "'price'", "INT", "STRING", "WHITESPACE"
+		"'name'", "'rating'", "'price'", "INT", "STRING", "WS"
 	};
 	public static final int
 		RULE_file = 0, RULE_orExpression = 1, RULE_andExpression = 2, RULE_atom = 3, 

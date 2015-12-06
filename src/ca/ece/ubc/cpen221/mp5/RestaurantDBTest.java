@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -16,19 +17,42 @@ import ca.ece.ubc.cpen221.mp5.statlearning.Coordinate;
 public class RestaurantDBTest {
 
     @Test
-    public void test() throws IOException {
+    public void DuplicateTest() throws IOException {
         
         RestaurantDB db = new RestaurantDB("restaurants.json", "reviews.json", "users.json");
-        db.getRestaurantList();
-        System.out.print(db.toString());
         
-        String testString = Algorithms.convertClustersToJSON(Algorithms.kMeansClustering(3,db));
-        System.out.println(testString);
+        List<Restaurant> restaurants = db.getRestaurantList();
+        List<User> users = db.getUserList();
+        List<Review> reviews = db.getReviewList();
         
-        FileWriter out = new FileWriter("visualize/voronoi.json");
-        out.write(testString);
-        out.close();
+        for (int i = 0; i < restaurants.size(); i++){
+            for (int j = 0; j < i; j++){
+                if(restaurants.get(i).equals(restaurants.get(j))) fail("duplicate!");
+            }
+            for (int l = i+1; l < restaurants.size(); l++){
+                if(restaurants.get(i).equals(restaurants.get(l))) fail("duplicate!");
+            }
+        }
         
+        for (int i = 0; i < users.size(); i++){
+            for (int j = 0; j < i; j++){
+                if(users.get(i).equals(users.get(j))) fail("duplicate!");
+            }
+            for (int l = i+1; l < users.size(); l++){
+                if(users.get(i).equals(users.get(l))) fail("duplicate!");
+            }
+        }
+        
+        for (int i = 0; i < reviews.size(); i++){
+            for (int j = 0; j < i; j++){
+                if(reviews.get(i).equals(reviews.get(j))) fail("duplicate!");
+            }
+            for (int l = i+1; l < reviews.size(); l++){
+                if(reviews.get(i).equals(reviews.get(l))) fail("duplicate!");
+            }
+        }
+        
+       
     }
     
     

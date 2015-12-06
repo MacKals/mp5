@@ -5,8 +5,6 @@ import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 
-// TODO: Use this class to represent a Yelp review.
-
 public class Review {
     
      String businessID;
@@ -19,6 +17,17 @@ public class Review {
   
      private JSONObject reviewObject;
     
+     /**
+      * Constructs a Review object based on Yelp data.
+      * @param businessID
+      * @param userID
+      * @param votes
+      * @param reviewID
+      * @param text
+      * @param stars
+      * @param date
+      * @param reviewObject
+      */
      public Review (String businessID,
                     String userID,
                     Object votes,

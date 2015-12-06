@@ -11,9 +11,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-// TODO: This class represents the Restaurant Database.
+
 // Define the internal representation and 
 // state the rep invariant and the abstraction function.
+
+//The RI for the db:
+//  -no 2 restaurants are the same
+//  -There is at least one restaurant, user, and review
+
+
+//The AF for the db:
+// -the db contains   //TODO: the AF
+//
 
 public class RestaurantDB {
 

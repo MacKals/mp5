@@ -43,10 +43,10 @@ public class Coordinate {
     public boolean equals(Object coordinate){
         
         if (coordinate instanceof Coordinate){
-            
-            if (((Coordinate) coordinate).xCoord <= this.xCoord + 0.00000000001 && ((Coordinate) coordinate).xCoord >= this.xCoord - 0.00000000001 ){
+            //to account for floating point errors
+            if (((Coordinate) coordinate).xCoord <= this.xCoord + 0.00000001 && ((Coordinate) coordinate).xCoord >= this.xCoord - 0.00000001 ){
                 
-                    if (((Coordinate) coordinate).yCoord <= this.yCoord + 00000000001 && ((Coordinate) coordinate).yCoord >= this.yCoord - 00000000001) {
+                    if (((Coordinate) coordinate).yCoord <= this.yCoord + 00000001 && ((Coordinate) coordinate).yCoord >= this.yCoord - 00000001) {
                         return true;
                     }
                 
@@ -55,5 +55,8 @@ public class Coordinate {
         return false;
     }
 
-    //TODO: May be hashcode needs to be implemented..
+    @Override
+    public int hashCode(){
+        return (int) (Math.pow(this.xCoord, 2) + Math.pow(this.yCoord, 2));
+    }
 }

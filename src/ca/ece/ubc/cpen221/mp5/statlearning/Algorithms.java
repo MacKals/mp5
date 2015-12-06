@@ -33,7 +33,6 @@ public class Algorithms {
 
         boolean calibrating = true;
         boolean again = true;
-        int counter = 1;
 
         double maxX = 0;
         double minX = 0;
@@ -107,9 +106,6 @@ public class Algorithms {
                 }
             }
         }
-        for (int i = 0; i < k; i++) {
-            System.out.println(kNodes.get(i).xCoord + " , " + kNodes.get(i).yCoord);
-        }
 
         // enter the calibration stage.
 
@@ -130,8 +126,6 @@ public class Algorithms {
             if (!calibrating)
                 break;
 
-            System.out.println("Calibrating... take " + counter);
-
             // recompute the location of the nodes as the centroid.
 
             for (int i = 0; i < k; i++) {
@@ -145,10 +139,10 @@ public class Algorithms {
                     kNodes.add(i, newCentroid);
 
                 } else {
-                    System.out.println("node " + i + " lost its neighbours!");
+                    //System.out.println("node " + i + " lost its neighbours!");
                 }
 
-                System.out.println(kNodes.get(i).xCoord + " , " + kNodes.get(i).yCoord);
+                //System.out.println(kNodes.get(i).xCoord + " , " + kNodes.get(i).yCoord);
 
             }
 
@@ -164,8 +158,6 @@ public class Algorithms {
                 allClusters.get(restaurant.getLocation().findClosestNeighbour(kNodes)).add(restaurant);
 
             }
-
-            counter++;
 
         }
 
@@ -217,7 +209,7 @@ public class Algorithms {
                 obj.put("y",  restaurant.getLocation().yCoord);
                 obj.put("name",  restaurant.getName());
                 obj.put("cluster",  i);
-                obj.put("weight",  1.0 );
+                obj.put("weight",  4.0 );
                 
 
                 theString += obj.toString();
@@ -246,14 +238,15 @@ public class Algorithms {
      *            The RestaurantDB containing the restaurants to analyze
      * @param featureFunction
      *            a function that returns a property of a particular restaurant.
-     * @return
+     * @return a function that, when provided a restaurant, returns the predicted stars that the user u would give it 
+     * @throws Exception if the user u has not written any reviews for the restaurants in the database db
      */
-    public static MP5Function getPredictor(User u, RestaurantDB db, MP5Function featureFunction) {
+    public static MP5Function getPredictor(User u, RestaurantDB db, MP5Function featureFunction) throws Exception {
 
         ArrayList<Double> regCoefficients = computeRegressionCoefficients(featureFunction, u, db);
 
         RegressionFunction returnFunction = new RegressionFunction(regCoefficients.get(1), regCoefficients.get(2),
-                featureFunction);
+                regCoefficients.get(0), featureFunction);
 
         return returnFunction;
     }
@@ -270,8 +263,9 @@ public class Algorithms {
      * @param featureFunctionList
      *            a list of MP5Functions to analyze
      * @return the feature function that best predicts the user's ratings
+     * @throws Exception if the user has not written a single review for these restaurants in the database.
      */
-    public static MP5Function getBestPredictor(User u, RestaurantDB db, List<MP5Function> featureFunctionList) {
+    public static MP5Function getBestPredictor(User u, RestaurantDB db, List<MP5Function> featureFunctionList) throws Exception {
 
         int indexOfGreatestR2 = 0;
         double currentGreatestR2 = 0;
@@ -302,9 +296,10 @@ public class Algorithms {
      * @param db
      *            the RestaurantDB
      * @return an ArrayList containing 3 doubles, in the order R^2, a, b.
+     * @throws Exception if the user u has not reviewed any of the restaurants within the database
      */
-    private static ArrayList<Double> computeRegressionCoefficients(MP5Function featureFunction, User u,
-            RestaurantDB db) {
+    public static ArrayList<Double> computeRegressionCoefficients(MP5Function featureFunction, User u,
+            RestaurantDB db) throws Exception {
 
         double sumOfInput = 0;
         double sumOfOutput = 0;
@@ -335,7 +330,9 @@ public class Algorithms {
                         if (restaurant.getBusinessID().equals(review.getBusinessID())) {
 
                             sumOfInput += featureFunction.f(restaurant, db);
+                            inputs.add(featureFunction.f(restaurant, db));
                             sumOfOutput += review.getStars();
+                            outputs.add(review.getStars() +0.0);
                             numDataPairs++;
                             break;
 
@@ -344,7 +341,9 @@ public class Algorithms {
                 }
             }
         }
-
+        if (numDataPairs == 0){
+            throw new Exception( "this user has not written any reviews for these restaurants! ");
+        }
         meanInput = sumOfInput / numDataPairs;
         meanOutput = sumOfOutput / numDataPairs;
 
@@ -357,12 +356,18 @@ public class Algorithms {
             syy += (outputs.get(i) - meanOutput) * (outputs.get(i) - meanOutput);
             sxy += (inputs.get(i) - meanInput) * (outputs.get(i) - meanOutput);
         }
-
-        double b = sxy / sxx;
+        
+        double b;
+        if (sxx > 0){
+            b = sxy / sxx;
+        } else {
+            b = 0; 
+        }
+        
 
         ArrayList<Double> returnList = new ArrayList<Double>();
         returnList.add((sxy * sxy) / (sxx * syy));
-        returnList.add(meanOutput - b * meanInput);
+        returnList.add(meanOutput - (b * meanInput));
         returnList.add(b);
 
         return returnList;
@@ -379,7 +384,7 @@ public class Algorithms {
      *         restaurants
      * 
      */
-    private static Coordinate computeCentroidOfRestaurants(List<Restaurant> coordinates) {
+    public static Coordinate computeCentroidOfRestaurants(List<Restaurant> coordinates) {
 
         double newX = 0;
         double newY = 0;

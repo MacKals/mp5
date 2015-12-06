@@ -115,7 +115,7 @@ public class RestaurantDBServer {
             }
         }
 
-        return "cannot get resturant";
+        return "cannot get restaurant";
     }
 
     /**

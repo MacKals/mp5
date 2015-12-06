@@ -37,7 +37,27 @@ public class Restaurant {
     
     private JSONObject restaurantObject;
 
-    
+    /**
+     * Constructs a new restaurant object with the data provided by Yelp.
+     * 
+     * @param url
+     * @param photoURL
+     * @param longitude
+     * @param latitude
+     * @param city
+     * @param fullAddress
+     * @param neighbourhoods
+     * @param state
+     * @param schools
+     * @param name
+     * @param businessID
+     * @param open
+     * @param categories
+     * @param stars
+     * @param reviewCount
+     * @param price
+     * @param restaurantObject
+     */
     public Restaurant ( String url,
                         String photoURL,
                         double longitude,
@@ -77,30 +97,10 @@ public class Restaurant {
         this.reviewCount = reviewCount;
         this.price = price;
         
-        this.coordinate = new Coordinate(latitude, longitude);
+        this.coordinate = new Coordinate(longitude, latitude);
         
         this.restaurantObject = restaurantObject;
       
-    }
-    
-    private Restaurant(Restaurant old) {
-        this.city = old.city;
-        this.fullAddress = old.fullAddress;
-        this.neighbourhoods = old.neighbourhoods;
-        this.state = old.state;
-        this.schools = old.schools;
-
-        this.name = old.name;
-        this.businessID = old.businessID;
-        this.open = old.open;
-
-        this.categories = old.categories;
-
-        this.stars = old.stars;
-        this.reviewCount = old.reviewCount;
-        this.price = old.price;
-        
-        this.coordinate = old.coordinate;
     }
     
     public Coordinate getLocation(){
@@ -129,10 +129,6 @@ public class Restaurant {
     
     public ArrayList<String> getCategories(){
         return this.categories;
-    }
-    
-    public Restaurant copy() {
-        return new Restaurant(this);
     }
     
     

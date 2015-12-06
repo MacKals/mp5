@@ -27,7 +27,7 @@ public class NodePrice implements Query {
                 Restaurant restaurant = (Restaurant) object;
                 
                 if (lowerPrice <= restaurant.getPrice() && restaurant.getPrice() <= higherPrice) { //TODO: check if it is inclusinve
-                    result.add(restaurant.copy());
+                    result.add(restaurant);
                 }
             }
         

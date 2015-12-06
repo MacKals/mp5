@@ -28,7 +28,7 @@ public class NodeRating implements Query {
             Restaurant restaurant = (Restaurant) object;
 
             if (lowerRating <= restaurant.getStars() && restaurant.getStars() <= higherRating) {
-                result.add(restaurant.copy());
+                result.add(restaurant);
             }
         }
 

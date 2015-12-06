@@ -7,8 +7,12 @@ public class RegressionFunction implements MP5Function {
 
     private double a = 0.0;
     private double b = 0.0;
+    
+    @SuppressWarnings("unused")
     private double r_squared = 0.0;
+    
     private MP5Function featureFunction;
+    
     
     RegressionFunction(double a, double b, double r_squared, MP5Function featureFunction){
         this.a = a;

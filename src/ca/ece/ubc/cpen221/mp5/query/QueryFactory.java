@@ -5,11 +5,12 @@ import java.util.Stack;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RuleContext;
+//import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class QueryFactory {
 
@@ -54,28 +55,25 @@ public class QueryFactory {
     private static class QueryListener_QueryCreator extends QueryBaseListener {
         
         private Stack<Query> stack = new Stack<Query>();
-
-        private int orCount = 0;
         
+        @SuppressWarnings("unused")
         @Override
-        public void exitOrExpression(QueryParser.OrExpressionContext ctx) {
-            
-            if (ctx.OR(orCount++) != null) {
-                Query right = stack.pop();
+        public void exitOrExpression(QueryParser.OrExpressionContext ctx) {            
+            for (TerminalNode orNode : ctx.OR()) {
                 Query left = stack.pop();
+                Query right = stack.pop();
                 Query or = new NodeOr(right, left);
                 stack.push(or);
             }
         }
-        
-        private int andCount = 0;
-        
+                
+        @SuppressWarnings("unused")
         @Override 
         public void exitAndExpression(@NotNull QueryParser.AndExpressionContext ctx) { 
             
-            if (ctx.AND(andCount++) != null) {
-                Query right = stack.pop();
+            for (TerminalNode andNode : ctx.AND()) {
                 Query left = stack.pop();
+                Query right = stack.pop();
                 Query and = new NodeAnd(right, left);
                 stack.push(and);
             }
@@ -104,7 +102,7 @@ public class QueryFactory {
             String start = ctx.range().INT(0).getText();
             String end = ctx.range().INT(1).getText();
 
-            Query rating = new NodePrice(Integer.parseInt(start), Integer.parseInt(end));
+            Query rating = new NodeRating(Integer.parseInt(start), Integer.parseInt(end));
             stack.push(rating);
         }
 

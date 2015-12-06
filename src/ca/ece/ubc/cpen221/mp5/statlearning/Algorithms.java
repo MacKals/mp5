@@ -4,11 +4,8 @@ import java.util.Set;
 
 import org.json.simple.JSONObject;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import ca.ece.ubc.cpen221.mp5.*;
 
@@ -196,6 +193,7 @@ public class Algorithms {
      * @return A string in JSON format of all the restaurants based on their
      *         clustering
      */
+    @SuppressWarnings("unchecked")
     public static String convertClustersToJSON(List<Set<Restaurant>> clusters) {
 
         String theString = new String();

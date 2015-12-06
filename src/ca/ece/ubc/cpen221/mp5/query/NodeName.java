@@ -26,7 +26,7 @@ public class NodeName implements Query {
             Restaurant restaurant = (Restaurant) object;
 
             if (restaurant.getName().contains(name)) {
-                result.add(restaurant.copy());
+                result.add(restaurant);
             }
         }
 

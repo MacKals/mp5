@@ -1,20 +1,17 @@
 package ca.ece.ubc.cpen221.mp5;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 
 public class User {
-        
-    private String url;
-    private Object votes;
+    
     private int reviewCount;
     private String userID;
     private String name;
     private double averageStars;
     
-    private JSONObject userObject;
+    private JSONObject user;
     
     /**
      * Constructs a User object based on Yelp data.
@@ -26,22 +23,14 @@ public class User {
      * @param averageStars
      * @param userObject
      */
-    public User(String url,
-                 Object votes,
-                 int reviewCount,
-                 String userID,
-                 String name,
-                 double averageStars,
-                 JSONObject userObject){
-        
-        this.url = url;
-        this.votes = votes;
-        this.reviewCount = reviewCount;
-        this.userID = userID;
-        this.name = name;
-        this.averageStars = averageStars;
-        
-        this.userObject = userObject;
+    public User(JSONObject user){
+
+        this.user = user;
+
+        this.reviewCount = UtilityMethods.safeLongToInt((long) user.get("review_count"));
+        this.userID = (String) user.get("user_id");
+        this.name = (String) user.get("name");
+        this.averageStars = (double) user.get("average_stars");
     }
     
     public int getReviewCount(){
@@ -61,7 +50,7 @@ public class User {
     }
     
     public String representationInJSON() throws IOException {
-        return userObject.toJSONString();
+        return user.toJSONString();
     }
     
     @Override

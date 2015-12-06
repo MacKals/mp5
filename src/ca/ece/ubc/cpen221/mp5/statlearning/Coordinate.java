@@ -2,7 +2,6 @@ package ca.ece.ubc.cpen221.mp5.statlearning;
 
 
 import java.util.List;
-import java.util.Set;
 
 public class Coordinate {
     

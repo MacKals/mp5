@@ -2,25 +2,27 @@ package ca.ece.ubc.cpen221.mp5;
 
 import static org.junit.Assert.*;
 
-import java.io.FileNotFoundException;
+//import static org.junit.Assert.*;
+
 import java.io.FileWriter;
 import java.io.IOException;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import org.junit.Test;
 
 import ca.ece.ubc.cpen221.mp5.statlearning.Algorithms;
-import ca.ece.ubc.cpen221.mp5.statlearning.Coordinate;
 
 public class RestaurantDBTest {
 
     @Test
     public void DuplicateTest() throws IOException {
         
-        RestaurantDB db = new RestaurantDB("restaurants.json", "reviews.json", "users.json");
-        
+        RestaurantDB db = new RestaurantDB("data/restaurants.json", "data/reviews.json", "data/users.json");
+
         List<Restaurant> restaurants = db.getRestaurantList();
         List<User> users = db.getUserList();
         List<Review> reviews = db.getReviewList();
@@ -33,7 +35,7 @@ public class RestaurantDBTest {
                 if(restaurants.get(i).equals(restaurants.get(l))) fail("duplicate!");
             }
         }
-        
+
         for (int i = 0; i < users.size(); i++){
             for (int j = 0; j < i; j++){
                 if(users.get(i).equals(users.get(j))) fail("duplicate!");
@@ -56,4 +58,5 @@ public class RestaurantDBTest {
     }
     
     
+
 }

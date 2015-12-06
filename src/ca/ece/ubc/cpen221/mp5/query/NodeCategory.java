@@ -25,7 +25,7 @@ public class NodeCategory implements Query {
             Restaurant restaurant = (Restaurant) object;
 
             if (restaurant.getName().contains(cathegory)) { 
-                result.add(restaurant.copy());
+                result.add(restaurant);
             }
         }
 

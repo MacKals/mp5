@@ -51,13 +51,12 @@ public class RestaurantDBServerTest {
 //    @Test
     public void testAddReview() {
         
-//        price:      PRICE       LP INT RP; 
 
     }
     
     @Test
     public void testSearchQuery() {
-        System.out.println(server.query("1"));
+        System.out.println(server.query("price(1..2)"));
         System.out.println(server.query("name(\"Italian\")"));
         System.out.println(server.query("in(test)"));
         

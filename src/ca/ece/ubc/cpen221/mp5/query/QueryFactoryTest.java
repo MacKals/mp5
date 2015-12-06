@@ -19,10 +19,10 @@ public class QueryFactoryTest {
         answers.add("price: 2...4");
         
         results.add(QueryFactory.parse("(rating(1..2) || name(\"res\")) && price(3..5)").stringRepresentation());
-        answers.add("((rating: 1...2 || name: res) && price: 3..5)");
+        answers.add("((rating: 1...2 || name: res) && price: 3...5)");
 
         results.add(QueryFactory.parse("rating(1..2) && price(1..4)").stringRepresentation());
-        answers.add("(rating: 1..2 && price: 1..4)");
+        answers.add("(rating: 1...2 && price: 1...4)");
        
         for (int i = 0; i < results.size(); i++) {
             

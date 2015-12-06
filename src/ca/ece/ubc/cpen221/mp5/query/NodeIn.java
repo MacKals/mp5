@@ -26,7 +26,7 @@ public class NodeIn implements Query {
             Restaurant restaurant = (Restaurant) object;
 
             if (restaurant.getLocationName().contains(locationName)) {
-                result.add(restaurant.copy());
+                result.add(restaurant);
             }
         }
 

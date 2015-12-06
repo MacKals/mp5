@@ -34,10 +34,10 @@ public class QueryFactory {
         ParseTree tree = parser.file(); // "root" is the starter rule.
 
         // debugging option #1: print the tree to the console
-//        System.err.println(tree.toStringTree(parser));
+        System.err.println(tree.toStringTree(parser));
         
         // debugging option #2: show the tree in a window
-//        ((RuleContext) tree).inspect(parser);
+        ((RuleContext) tree).inspect(parser);
 
         // debugging option #3: walk the tree with a listener
 //         new ParseTreeWalker().walk(new QueryListener_PrintEverything(), tree);
@@ -60,9 +60,10 @@ public class QueryFactory {
         @Override
         public void exitOrExpression(QueryParser.OrExpressionContext ctx) {
             
-            if (ctx.OR(orCount++) != null) {
-                Query right = stack.pop();
+            if (ctx.OR(orCount) != null) {
+                orCount++;
                 Query left = stack.pop();
+                Query right = stack.pop();
                 Query or = new NodeOr(right, left);
                 stack.push(or);
             }
@@ -73,9 +74,10 @@ public class QueryFactory {
         @Override 
         public void exitAndExpression(@NotNull QueryParser.AndExpressionContext ctx) { 
             
-            if (ctx.AND(andCount++) != null) {
-                Query right = stack.pop();
+            if (ctx.AND(andCount) != null) {
+                andCount++;
                 Query left = stack.pop();
+                Query right = stack.pop();
                 Query and = new NodeAnd(right, left);
                 stack.push(and);
             }
@@ -104,7 +106,7 @@ public class QueryFactory {
             String start = ctx.range().INT(0).getText();
             String end = ctx.range().INT(1).getText();
 
-            Query rating = new NodePrice(Integer.parseInt(start), Integer.parseInt(end));
+            Query rating = new NodeRating(Integer.parseInt(start), Integer.parseInt(end));
             stack.push(rating);
         }
 

@@ -47,14 +47,20 @@ public class RestaurantDBServer {
      */
     public RestaurantDBServer(int port, String restaurantDetails, String userReviews, String userDetails)
             throws IOException {
+                
         db = new RestaurantDB(restaurantDetails, userReviews, userDetails);
-        // serverSocket = new ServerSocket(port);
+        serverSocket = new ServerSocket(port);
     }
 
     /**
      * Start a RestaruantServer running on specified port from specified files.
      */
     public static void main(String[] args) {
+        
+        for (int i = 0; i < args.length; i++) {
+            System.out.println("input arg " + i + " = " + args[i] );
+        }
+        
         try {
             RestaurantDBServer server = new RestaurantDBServer(Integer.parseInt(args[0]), args[1], args[2], args[3]);
             server.serve();
@@ -178,12 +184,8 @@ public class RestaurantDBServer {
             // each request is a single line containing a number
             for (String line = in.readLine(); line != null; line = in.readLine()) {
                 System.err.println("request: " + line);
-                try {
-                    out.println(callFunctionFromClientRequest(line));
-                } catch (NumberFormatException e) {
-                    // complain about ill-formatted request
-                    out.println("err");
-                }
+                
+                out.println(callFunctionFromClientRequest(line) + "\n");
 
                 // flushing buffer so the reply is sent
                 out.flush();
@@ -248,18 +250,19 @@ public class RestaurantDBServer {
 
         case AddReview:
             return addReview(query.getQueryArgument());
+        
+        default :
+            return query(query.getQueryArgument());
         }
-
-        return query(queryString);
     }
 
     /**
      * Specifies the specific query formats and associated strings, enabling the
      * appropriate methods to be called more easily
      */
-    enum ClientQuery {
+    public enum ClientQuery {
 
-        RandomReview, GetRestaurant, AddRestaurant, AddUser, AddReview;
+        RandomReview, GetRestaurant, AddRestaurant, AddUser, AddReview, SearchQuery;
 
         private String queryArgument;
 
@@ -272,21 +275,26 @@ public class RestaurantDBServer {
             for (ClientQuery query : ClientQuery.values()) {
 
                 String queryString = query.toString();
-                String substring = clientString.substring(0, queryString.length() - 1);
+                
+                if (clientString.length() < queryString.length()) break; //protection for searchQueries
+                
+                String substring = clientString.substring(0, queryString.length());
 
-                if (queryString == substring) {
+                if (queryString.equals(substring)) {
 
-                    Pattern p = Pattern.compile("\"([^\"]*)\"");
-                    Matcher m = p.matcher(queryString);
-
-                    if (m.find()) {
-                        query.queryArgument = m.group(1);
-                    }
+                    int firstQuoteIndex = clientString.indexOf("\"") + 1;
+                    int secondQuoteIndex = clientString.indexOf("\"", firstQuoteIndex);
+                    
+                    query.queryArgument = clientString.substring(firstQuoteIndex, secondQuoteIndex);
+                    
                     return query;
                 }
             }
 
-            return null;
+            //no matches in pre-specified strings, we conclude we are handling a search query
+            ClientQuery query = ClientQuery.SearchQuery;
+            query.queryArgument = clientString;
+            return query;
         }
 
         @Override
@@ -307,9 +315,10 @@ public class RestaurantDBServer {
 
             case AddReview:
                 return "addReview";
+            
+            default :
+                return "searchQuery";
             }
-
-            return null;
         }
     }
 

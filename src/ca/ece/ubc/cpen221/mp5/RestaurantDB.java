@@ -103,7 +103,7 @@ public class RestaurantDB {
     private boolean addFromFile(String filename, FileKind fileKind) {
 
         try {
-            Iterator<String> fileEntries = new BufferedReader(new FileReader("data/" + filename)).lines().iterator();
+            Iterator<String> fileEntries = new BufferedReader(new FileReader(filename)).lines().iterator();
 
             while (fileEntries.hasNext()) {
 

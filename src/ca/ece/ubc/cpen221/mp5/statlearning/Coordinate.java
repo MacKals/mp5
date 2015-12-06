@@ -55,5 +55,8 @@ public class Coordinate {
         return false;
     }
 
-    //TODO: May be hashcode needs to be implemented..
+    @Override
+    public int hashCode(){
+        return (int) (Math.pow(this.xCoord, 2) + Math.pow(this.yCoord, 2));
+    }
 }

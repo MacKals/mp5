@@ -33,7 +33,6 @@ public class Algorithms {
 
         boolean calibrating = true;
         boolean again = true;
-        int counter = 1;
 
         double maxX = 0;
         double minX = 0;
@@ -127,8 +126,6 @@ public class Algorithms {
             if (!calibrating)
                 break;
 
-            //System.out.println("Calibrating... take " + counter);
-
             // recompute the location of the nodes as the centroid.
 
             for (int i = 0; i < k; i++) {
@@ -161,8 +158,6 @@ public class Algorithms {
                 allClusters.get(restaurant.getLocation().findClosestNeighbour(kNodes)).add(restaurant);
 
             }
-
-            counter++;
 
         }
 
@@ -214,7 +209,7 @@ public class Algorithms {
                 obj.put("y",  restaurant.getLocation().yCoord);
                 obj.put("name",  restaurant.getName());
                 obj.put("cluster",  i);
-                obj.put("weight",  1.0 );
+                obj.put("weight",  4.0 );
                 
 
                 theString += obj.toString();
@@ -243,9 +238,10 @@ public class Algorithms {
      *            The RestaurantDB containing the restaurants to analyze
      * @param featureFunction
      *            a function that returns a property of a particular restaurant.
-     * @return
+     * @return a function that, when provided a restaurant, returns the predicted stars that the user u would give it 
+     * @throws Exception if the user u has not written any reviews for the restaurants in the database db
      */
-    public static MP5Function getPredictor(User u, RestaurantDB db, MP5Function featureFunction) {
+    public static MP5Function getPredictor(User u, RestaurantDB db, MP5Function featureFunction) throws Exception {
 
         ArrayList<Double> regCoefficients = computeRegressionCoefficients(featureFunction, u, db);
 
@@ -267,8 +263,9 @@ public class Algorithms {
      * @param featureFunctionList
      *            a list of MP5Functions to analyze
      * @return the feature function that best predicts the user's ratings
+     * @throws Exception if the user has not written a single review for these restaurants in the database.
      */
-    public static MP5Function getBestPredictor(User u, RestaurantDB db, List<MP5Function> featureFunctionList) {
+    public static MP5Function getBestPredictor(User u, RestaurantDB db, List<MP5Function> featureFunctionList) throws Exception {
 
         int indexOfGreatestR2 = 0;
         double currentGreatestR2 = 0;
@@ -299,9 +296,10 @@ public class Algorithms {
      * @param db
      *            the RestaurantDB
      * @return an ArrayList containing 3 doubles, in the order R^2, a, b.
+     * @throws Exception if the user u has not reviewed any of the restaurants within the database
      */
     public static ArrayList<Double> computeRegressionCoefficients(MP5Function featureFunction, User u,
-            RestaurantDB db) {
+            RestaurantDB db) throws Exception {
 
         double sumOfInput = 0;
         double sumOfOutput = 0;
@@ -343,7 +341,9 @@ public class Algorithms {
                 }
             }
         }
-
+        if (numDataPairs == 0){
+            throw new Exception( "this user has not written any reviews for these restaurants! ");
+        }
         meanInput = sumOfInput / numDataPairs;
         meanOutput = sumOfOutput / numDataPairs;
 

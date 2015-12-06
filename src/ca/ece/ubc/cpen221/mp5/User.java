@@ -5,8 +5,6 @@ import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 
-// TODO: Use this class to represent a Yelp user.
-
 public class User {
         
     private String url;
@@ -18,6 +16,16 @@ public class User {
     
     private JSONObject userObject;
     
+    /**
+     * Constructs a User object based on Yelp data.
+     * @param url
+     * @param votes
+     * @param reviewCount
+     * @param userID
+     * @param name
+     * @param averageStars
+     * @param userObject
+     */
     public User(String url,
                  Object votes,
                  int reviewCount,

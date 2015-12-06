@@ -105,7 +105,7 @@ public class AlgorithmsTest {
     }
 
     @Test
-    public void testGetPredictor() {
+    public void testGetPredictor() throws Exception {
 
         RestaurantDB db = new RestaurantDB("restaurants.json", "reviews.json", "users.json");
         MP5Function price = new RestaurantPriceScale();
@@ -118,7 +118,7 @@ public class AlgorithmsTest {
     }
     
     @Test
-    public void testGetBestPredictor(){
+    public void testGetBestPredictor() throws Exception{
         
         RestaurantDB db = new RestaurantDB("restaurants.json", "reviews.json", "users.json");
         
@@ -145,7 +145,7 @@ public class AlgorithmsTest {
         
         ArrayList<Double> bestFuncCoeff = Algorithms.computeRegressionCoefficients(bestFunc, db.getUserList().get(8), db);
         
-        
+        // no R2 should be greater than the bestFunc
         assert(bestFuncCoeff.get(0) >= coefficients1.get(0)); 
         assert(bestFuncCoeff.get(0) >= coefficients2.get(0));
         assert(bestFuncCoeff.get(0) >= coefficients3.get(0));

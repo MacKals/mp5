@@ -27,7 +27,6 @@ public class Restaurant {
     private boolean open;
 
     private ArrayList<String> categories;
-    //private String type; // all are "business"??
 
     private double stars;
     private int reviewCount;
@@ -97,7 +96,8 @@ public class Restaurant {
         this.reviewCount = reviewCount;
         this.price = price;
         
-        this.coordinate = new Coordinate(longitude, latitude);
+        // we will let x represent latitude, y represent longitude.
+        this.coordinate = new Coordinate(latitude, longitude);
         
         this.restaurantObject = restaurantObject;
       

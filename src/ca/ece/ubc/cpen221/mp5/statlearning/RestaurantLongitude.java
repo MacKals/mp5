@@ -7,7 +7,7 @@ public class RestaurantLongitude implements MP5Function {
 
     @Override
     public double f(Restaurant yelpRestaurant, RestaurantDB db) {
-        return yelpRestaurant.getLocation().xCoord;
+        return yelpRestaurant.getLocation().yCoord;
     }
 
 }

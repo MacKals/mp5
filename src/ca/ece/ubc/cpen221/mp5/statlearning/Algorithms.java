@@ -203,8 +203,6 @@ public class Algorithms {
 
                 JSONObject obj = new JSONObject();
 
-
-                
                 obj.put("x",  restaurant.getLocation().xCoord);
                 obj.put("y",  restaurant.getLocation().yCoord);
                 obj.put("name",  restaurant.getName());
@@ -257,7 +255,7 @@ public class Algorithms {
      * in the highest R^2 value from a linear regression.
      * 
      * @param u
-     *            the User to predict ratings of
+     *            the User to predict ratings of restaurants.
      * @param db
      *            the RestaurantDB
      * @param featureFunctionList

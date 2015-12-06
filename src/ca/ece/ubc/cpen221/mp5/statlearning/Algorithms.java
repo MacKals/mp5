@@ -99,10 +99,21 @@ public class Algorithms {
             // restaurant.
             again = false;
 
+            
+            //also check that no two nodes are in the same position
             for (int i = 0; i < k; i++) {
                 if (allClusters.get(i).isEmpty()) {
                     again = true;
                     break;
+                }
+            }
+            
+            for (int i = 0; i < kNodes.size(); i++){
+                for (int j = 0; j < i; j++){
+                    if(kNodes.get(i).equals(kNodes.get(j))) again = true;
+                }
+                for (int l = i+1; l < kNodes.size(); l++){
+                    if(kNodes.get(i).equals(kNodes.get(l))) again = true;
                 }
             }
         }

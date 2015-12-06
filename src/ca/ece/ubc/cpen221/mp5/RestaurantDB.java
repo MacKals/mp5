@@ -8,21 +8,44 @@ import org.json.simple.parser.JSONParser;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 
-
+//TODO:
 // Define the internal representation and 
 // state the rep invariant and the abstraction function.
 
-//The RI for the db:
-//  -no 2 restaurants are the same
-//  -There is at least one restaurant, user, and review
-
-
-//The AF for the db:
-// -the db contains   //TODO: the AF
-//
+/**
+ * 
+ * This Restaurant-Database is a simple in-memory database with restaurants,
+ * users and reviews. The information is at launch read from user-specified
+ * file. Functionality for search, adding elements and special query information
+ * requests are defined
+ * 
+ * The database is thread-safe, allowing for concurrent call requests.
+ * 
+ * 
+ * The RI for the db:
+ * <ul>
+ * <li>no 2 restaurants are the same</li>
+ * <li>there is at least one restaurant, user, and review</li>
+ * </ul>
+ * 
+ * The AF for the db:
+ * <ul>
+ * <li>the db represents the data from the given dataset</li> //TODO: update
+ * </ul>
+ *
+ * Thread safety strategy:
+ * <ul>
+ * <li>methods accessing a list is synchronized on that list</li>
+ * <li>thus no two methods can access the same list at the same time</li>
+ * <li>There is no direct interdependence between lists, so they can be changed
+ * independently of one another</li>
+ * </ul>
+ *
+ * @author MacLennan & Kals
+ * 
+ */
 
 public class RestaurantDB {
 
@@ -69,20 +92,61 @@ public class RestaurantDB {
         initComplete = true;
     }
 
-    public ArrayList<Restaurant> getRestaurantList() { // Perhaps make a copy?
-        return this.restaurants;
+    /**
+     * Thread safety argument:
+     * <ul>
+     * <li>locks on restaurants</li>
+     * </ul>
+     * 
+     * @return pointer to list of restaurants
+     */
+    public ArrayList<Restaurant> getRestaurantList() {
+        synchronized (restaurants) {
+            return this.restaurants;
+        }
     }
 
-    public ArrayList<Review> getReviewList() {// Perhaps make a copy?
-        return this.reviews;
+    /**
+     * Thread safety argument:
+     * <ul>
+     * <li>locks on reviews</li>
+     * </ul>
+     * 
+     * @return pointer to list of reviews
+     */
+    public ArrayList<Review> getReviewList() {
+        synchronized (reviews) {
+            return this.reviews;
+        }
     }
 
-    public ArrayList<User> getUserList() {// Perhaps make a copy?
-        return this.users;
+    /**
+     * Thread safety argument:
+     * <ul>
+     * <li>locks on users</li>
+     * </ul>
+     * 
+     * @return pointer to list of reviews
+     */
+    public ArrayList<User> getUserList() {
+        synchronized (users) {
+            return this.users;
+        }
     }
 
+    /**
+     * Thread safety argument:
+     * <ul>
+     * <li>locks on categories</li>
+     * </ul>
+     * 
+     * @return pointer to list of categories
+     */
     public ArrayList<String> getCategoryMapping() {
-        return (ArrayList<String>) Collections.unmodifiableList(categories);
+        synchronized (categories) {
+            return categories;
+        }
+        // return (ArrayList<String>) Collections.unmodifiableList(categories); //TODO: Do we want to do this with all returns? Immutable wrapper?
     }
 
     public enum FileKind {
@@ -91,7 +155,10 @@ public class RestaurantDB {
 
     /**
      * Adds all objects, be it restaurants, reviews, or users from a file to the
-     * RestaurantDB
+     * RestaurantDB Thread safety argument:
+     * <ul>
+     * <li>only called from constructor</li>
+     * </ul>
      * 
      * @param filename
      *            the name of the JSON file, including the .json file extension.
@@ -100,6 +167,7 @@ public class RestaurantDB {
      *            The type of file we wish to add to our database
      * @return true if the objects were successfully added from the file.
      */
+    @SuppressWarnings("resource")
     private boolean addFromFile(String filename, FileKind fileKind) {
 
         try {
@@ -117,6 +185,7 @@ public class RestaurantDB {
                     addUser(fileEntries.next());
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -126,22 +195,10 @@ public class RestaurantDB {
     }
 
     /**
-     * Converts a long to an int, provided the long can be converted without
-     * losing any of its value
      * 
-     * @param l
-     *            long value we wish to convert to
-     * @return the int corresponding to the long passed in
-     * @throws IllegalArgumentException
-     *             if the long cannot fit into the size of an int.
+     * @param inputCategories
+     * @return
      */
-    private static int safeLongToInt(long l) {
-        if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
-            throw new IllegalArgumentException(l + " cannot be cast to int without changing its value.");
-        }
-        return (int) l;
-    }
-
     public ArrayList<Double> mapCategories(ArrayList<String> inputCategories) {
         ArrayList<Double> categoriesDoubles = new ArrayList<Double>();
 
@@ -154,14 +211,18 @@ public class RestaurantDB {
     }
 
     /**
-     * Adds a restaurant to the restaurantDB
+     * Adds a restaurant to the restaurantDB. 
+     * Thread safety argument:
+     * <ul>
+     * <li>locks on restaurants when accessing it</li>
+     * <li>locks on categories when accessing it</li>
+     * </ul>
      * 
      * @param restaurantString
      *            a string in JSON format corresponding to a restaurant in the
      *            Yelp database.
      * @return true if restaurant add was successful, false otherwise.
      */
-
     public String addRestaurant(String restaurantString) {
 
         JSONParser parser = new JSONParser();
@@ -170,32 +231,33 @@ public class RestaurantDB {
 
             JSONObject restaurant = (JSONObject) parser.parse(restaurantString);
 
-            Restaurant newRestaurant = new Restaurant((String) restaurant.get("url"),
-                    (String) restaurant.get("photo_url"), (double) restaurant.get("longitude"),
-                    (double) restaurant.get("latitude"), (String) restaurant.get("city"),
-                    (String) restaurant.get("full_address"), (ArrayList<String>) restaurant.get("neighborhoods"),
-                    (String) restaurant.get("state"), (ArrayList<String>) restaurant.get("schools"),
-                    (String) restaurant.get("name"), (String) restaurant.get("business_id"),
-                    (boolean) restaurant.get("open"), (ArrayList<String>) restaurant.get("categories"),
-                    (double) restaurant.get("stars"), RestaurantDB.safeLongToInt((long) restaurant.get("review_count")),
-                    RestaurantDB.safeLongToInt((long) restaurant.get("price")), restaurant);
+            Restaurant newRestaurant = new Restaurant(restaurant);
 
-            // Check for duplication
-            if (initComplete) {
-                for (Restaurant restaurantInstance : restaurants) {
-                    if (restaurantInstance.getBusinessID() == newRestaurant.getBusinessID()) {
-                        return ReturnMessages.alreadyExistsError;
+            // accessing restaurants, lock on it:
+            synchronized (restaurants) {
+
+                // Check for duplication
+                if (initComplete) {
+                    for (Restaurant restaurantInstance : restaurants) {
+                        if (restaurantInstance.getBusinessID() == newRestaurant.getBusinessID()) {
+                            return ReturnMessages.alreadyExistsError;
+                        }
+                    }
+                }
+
+                restaurants.add(newRestaurant);
+            }
+
+            // accessing categories, lock on it:
+            synchronized (categories) {
+                
+                //add to categories if not there from before
+                for (String element : newRestaurant.getCategories()) {
+                    if (!categories.contains(element)) {
+                        categories.add(element);
                     }
                 }
             }
-
-            for (String element : newRestaurant.getCategories()) {
-                if (!categories.contains(element)) {
-                    categories.add(element);
-                }
-            }
-
-            restaurants.add(newRestaurant);
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -207,7 +269,10 @@ public class RestaurantDB {
 
     /**
      * Adds a user to the restaurantDB
-     * 
+     * Thread safety argument:
+     * <ul>
+     * <li>locks on users when accessing</li>
+     * </ul>
      * @param usertString
      *            a string in JSON format corresponding to a user in the Yelp
      *            database.
@@ -224,31 +289,27 @@ public class RestaurantDB {
 
             JSONObject user = (JSONObject) obj;
 
-            User newUser = new User((String) user.get("url"), (Object) user.get("votes"),
-                    RestaurantDB.safeLongToInt((long) user.get("review_count")), (String) user.get("user_id"),
-                    (String) user.get("name"), (double) user.get("average_stars"), user);
+            User newUser = new User(user);
 
-            // Check weather exists already
-            if (initComplete) {
-                for (User userInstance : users) {
-                    if (userInstance.getUserID() == newUser.getUserID()) { // TODO:
-                                                                           // Searching
-                                                                           // for
-                                                                           // dupliation
-                                                                           // based
-                                                                           // on
-                                                                           // user
-                                                                           // id
-                                                                           // only
-                                                                           // -
-                                                                           // more
-                                                                           // needed?
-                        return ReturnMessages.alreadyExistsError;
+            //accessing users, lock on it
+            synchronized(users) {
+                
+                // Check weather exists already
+                if (initComplete) {
+                    
+                    for (User userInstance : users) {
+                        if (userInstance.getUserID() == newUser.getUserID()) {
+                            // TODO:Search for duplication based on user id only -
+                            // more needed?
+                            return ReturnMessages.alreadyExistsError;
+                        }
                     }
                 }
-            }
 
-            users.add(newUser);
+                users.add(newUser);
+                
+            }
+           
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -260,7 +321,10 @@ public class RestaurantDB {
 
     /**
      * Adds a review to the restaurantDB
-     * 
+     * Thread safety argument:
+     * <ul>
+     * <li>locks on reviews when accessing</li>
+     * </ul>
      * @param reviewString
      *            a string in JSON format corresponding to a review in the Yelp
      *            database.
@@ -275,19 +339,23 @@ public class RestaurantDB {
 
             Review newReview = new Review((String) review.get("business_id"), (String) review.get("user_id"),
                     (Object) review.get("votes"), (String) review.get("review_id"), (String) review.get("text"),
-                    RestaurantDB.safeLongToInt((long) review.get("stars")), (String) review.get("date"), review);
+                    UtilityMethods.safeLongToInt((long) review.get("stars")), (String) review.get("date"), review);
 
-            // Check for duplication
-            if (initComplete) {
-                for (Review reviewInstance : reviews) {
-                    if (reviewInstance.reviewID == newReview.reviewID) {
-                        return ReturnMessages.alreadyExistsError;
+            synchronized(reviews) {
+                
+             // Check for duplication
+                if (initComplete) {
+                    for (Review reviewInstance : reviews) {
+                        if (reviewInstance.reviewID == newReview.reviewID) {
+                            return ReturnMessages.alreadyExistsError;
+                        }
                     }
                 }
+
+                reviews.add(newReview);
+                
             }
-
-            reviews.add(newReview);
-
+            
         } catch (ParseException e) {
             e.printStackTrace();
             return ReturnMessages.malformedExpressionError;

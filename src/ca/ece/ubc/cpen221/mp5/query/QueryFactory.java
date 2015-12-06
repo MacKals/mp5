@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class QueryFactory {
 
@@ -34,7 +35,7 @@ public class QueryFactory {
         ParseTree tree = parser.file(); // "root" is the starter rule.
 
         // debugging option #1: print the tree to the console
-        System.err.println(tree.toStringTree(parser));
+//        System.err.println(tree.toStringTree(parser));
         
         // debugging option #2: show the tree in a window
         ((RuleContext) tree).inspect(parser);
@@ -54,28 +55,23 @@ public class QueryFactory {
     private static class QueryListener_QueryCreator extends QueryBaseListener {
         
         private Stack<Query> stack = new Stack<Query>();
-
-        private int orCount = 0;
         
+        @SuppressWarnings("unused")
         @Override
-        public void exitOrExpression(QueryParser.OrExpressionContext ctx) {
-            
-            if (ctx.OR(orCount) != null) {
-                orCount++;
+        public void exitOrExpression(QueryParser.OrExpressionContext ctx) {            
+            for (TerminalNode orNode : ctx.OR()) {
                 Query left = stack.pop();
                 Query right = stack.pop();
                 Query or = new NodeOr(right, left);
                 stack.push(or);
             }
         }
-        
-        private int andCount = 0;
-        
+                
+        @SuppressWarnings("unused")
         @Override 
         public void exitAndExpression(@NotNull QueryParser.AndExpressionContext ctx) { 
             
-            if (ctx.AND(andCount) != null) {
-                andCount++;
+            for (TerminalNode andNode : ctx.AND()) {
                 Query left = stack.pop();
                 Query right = stack.pop();
                 Query and = new NodeAnd(right, left);

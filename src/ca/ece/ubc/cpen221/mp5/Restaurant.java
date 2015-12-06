@@ -1,7 +1,6 @@
 package ca.ece.ubc.cpen221.mp5;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
@@ -11,139 +10,79 @@ import ca.ece.ubc.cpen221.mp5.statlearning.Coordinate;
 // TODO: Use this class to represent a restaurant.
 // State the rep invariant and abs
 
+/**
+ * This class represents a restaurant
+ * 
+ * Rep invariant: 
+ * <ul> 
+ * <li> //TODO: implement </li>
+ * </ul>
+ * 
+ * @author MacLennan & Kals
+ *
+ */
+
 public class Restaurant {
-
-    private String url;
-    private String photoURL;
-
-    private String city;
-    private String fullAddress;
-    private ArrayList<String> neighbourhoods;
-    private String state;
-    private ArrayList<String> schools;
-
-    private String name;
-    private String businessID;
-    private boolean open;
-
-    private ArrayList<String> categories;
-
-    private double stars;
-    private int reviewCount;
-    private int price;
     
-    private Coordinate coordinate;
+    private JSONObject restaurant;
     
-    private JSONObject restaurantObject;
-
     /**
      * Constructs a new restaurant object with the data provided by Yelp.
-     * 
-     * @param url
-     * @param photoURL
-     * @param longitude
-     * @param latitude
-     * @param city
-     * @param fullAddress
-     * @param neighbourhoods
-     * @param state
-     * @param schools
-     * @param name
-     * @param businessID
-     * @param open
-     * @param categories
-     * @param stars
-     * @param reviewCount
-     * @param price
-     * @param restaurantObject
+     * @param restaurant
      */
-    public Restaurant ( String url,
-                        String photoURL,
-                        double longitude,
-                        double latitude,
-                        String city,
-                        String fullAddress,
-                        ArrayList<String> neighbourhoods,
-                        String state,
-                        ArrayList<String> schools,
-
-                        String name,
-                        String businessID,
-                        boolean open,
-
-                        ArrayList<String> categories,
-
-                        double stars,
-                        int reviewCount,
-                        int price,
-                        
-                        JSONObject restaurantObject){
-        
-        this.city = city;
-        this.fullAddress = fullAddress;
-        this.neighbourhoods = neighbourhoods;
-        this.state = state;
-        this.schools = schools;
-
-        this.name = name;
-        this.businessID = businessID;
-        this.open = open;
-
-        this.categories = categories;
-        
-
-        this.stars = stars;
-        this.reviewCount = reviewCount;
-        this.price = price;
-        
-        // we will let x represent latitude, y represent longitude.
-        this.coordinate = new Coordinate(latitude, longitude);
-        
-        this.restaurantObject = restaurantObject;
-      
+    public Restaurant ( JSONObject restaurant){
+        this.restaurant = restaurant;
     }
     
-    public Coordinate getLocation(){
-        return this.coordinate;
+    public Coordinate getLocation() {
+        
+        double longitude = (double) restaurant.get("longitude");
+        double latitude = (double) restaurant.get("latitude");
+
+        return  new Coordinate(latitude, longitude);
     }
     
     public int getPrice() {
-        return this.price;
+        return UtilityMethods.safeLongToInt((long) restaurant.get("price"));
     }
     
     public String getName() {
-        return this.name;
+        return (String) restaurant.get("name");
     }
     
     public String getLocationName() {
+        
+        @SuppressWarnings("unchecked")
+        String neighbourhoods = ((ArrayList<String>) restaurant.get("neighborhoods")).toString();
+        String city = (String) restaurant.get("city");
+        String fullAddress = (String) restaurant.get("full_address");
+        String state = (String) restaurant.get("state");
+        
         return city + fullAddress + neighbourhoods + state; // returns strings matching names describing location, for NodeIn // check this one out.
     }
 
     public double getStars() {
-        return this.stars;
+        return (double) restaurant.get("stars");
     }
     
     public String getBusinessID(){
-        return this.businessID;
+        return (String) restaurant.get("business_id");
     }
     
+    @SuppressWarnings("unchecked")
     public ArrayList<String> getCategories(){
-        return this.categories;
+        return (ArrayList<String>) restaurant.get("categories");
     }
-    
     
     public String representationInJSON() throws IOException {
-        
-        return restaurantObject.toJSONString();
-
-        
+        return restaurant.toJSONString();
     }
     
     @Override
     public boolean equals(Object object) {
         
         if (object instanceof Restaurant) {
-            if ( this.businessID == ((Restaurant) object).businessID ) {
+            if ( this.getBusinessID() == ((Restaurant) object).getBusinessID() ) {
                 return true;
             }
         }
@@ -153,6 +92,6 @@ public class Restaurant {
     
     @Override 
     public int hashCode() {
-        return this.businessID.hashCode();
+        return this.getBusinessID().hashCode();
     }
 }

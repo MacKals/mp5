@@ -23,14 +23,13 @@ public class QueryFactoryTest {
 
         results.add(QueryFactory.parse("rating(1..2) && price(1..4)").stringRepresentation());
         answers.add("(rating: 1...2 && price: 1...4)");
+        
+        results.add(QueryFactory.parse("in(\"Telegraph Ave\") && (category(\"Chinese\") || category(\"Italian\")) && price(2..2)").stringRepresentation());
+        answers.add("(in: Telegraph Ave && ((cathegory: Chinese || cathegory: Italian) && price: 2...2))");
        
         for (int i = 0; i < results.size(); i++) {
-            
             System.out.println(results.get(i));
             assertEquals(results.get(i), answers.get(i));
         }
     }
 }
-
-// STRING: ~[<>]+ ;
-// TODO:fix spaces?

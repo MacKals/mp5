@@ -5,12 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.math.BigInteger;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TestClient {
+        
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
@@ -21,10 +19,38 @@ public class TestClient {
      * hostname at the specified port.
      * @throws IOException if can't connect
      */
-    public TestClient(String hostname, int port) throws IOException {
+    public TestClient(int port, String hostname) throws IOException {
         socket = new Socket(hostname, port);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+    }
+    
+    /**
+     * Use a RestaurantDBServer to respond to main argument requests.
+     * @param port
+     * @param hostName
+     * @param queries
+     */
+    public static void main(String[] args) {
+        try {
+            
+            TestClient client = new TestClient(Integer.parseInt(args[0]), args[1]);
+            
+            for (int i = 2; i < args.length; i++) {
+                client.sendRequest(args[i]);
+                System.out.println("query sent: " + args[i]);
+            }
+            
+            for (int i = 2; i < args.length; i++) {
+                String reply = client.getReply();
+                System.out.println("Query: " + args[i] + ",\n \t Result: " + reply);
+            }
+            
+            client.close();
+            
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
     
     /**
@@ -63,45 +89,5 @@ public class TestClient {
         out.close();
         socket.close();
     }
-    
-    private static final int PORT = 4949;
-    private static final int N = 1;
-    
-    /**
-     * Use a FibonacciServer to find the first N query numbers.
-     */
-    public static void main(String[] args) {
-        try {
-            TestClient client = new TestClient("localhost", PORT);
-
-            List<String> queries = new ArrayList<>();
-            
-            
-            //add to list
-            queries.add("randomReview(\"La Val's Pizza\")");
-//            queries.add("getRestaurant(\"4D7IdtyRjH8qxcsHaz1-GA\")");
-//            queries.add("addRestaurant(\"\")");
-//            queries.add("in(\"Telegraph Ave\") && (category(\"Chinese\") || category(\"Italian\")) && price(1..2)");
-    
-
-            
-            // send the requests to find the first N query numbers
-            for (String query : queries) {
-                client.sendRequest(query);
-                System.out.println("query: " + query + "= ?");
-            }
-            
-            // collect the replies
-            for (String query : queries) {
-                String reply = client.getReply();
-                System.out.println("query(" + query + ") = " + reply);
-            }
-            
-            client.close();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-    }
-
     
 }

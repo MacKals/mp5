@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import ca.ece.ubc.cpen221.mp5.RestaurantDBServer.ClientQuery;
@@ -94,7 +93,11 @@ public class RestaurantDBServerTest {
         queries.add("price(1..3)");
         enumAnswer.add(ClientQuery.SearchQuery);
         argumentAnswer.add("price(1..3)");
-
+        
+        queries.add("in(\"Telegraph Ave\") && (category(\"Chinese\") || category(\"Italian\")) && price(1..2)");
+        enumAnswer.add(ClientQuery.SearchQuery);
+        argumentAnswer.add("in(\"Telegraph Ave\") && (category(\"Chinese\") || category(\"Italian\")) && price(1..2)");
+        
         for (int i = 0; i < queries.size(); i++) {
             ClientQuery clientQuery = ClientQuery.fromString(queries.get(i));
             assertEquals(clientQuery, enumAnswer.get(i));

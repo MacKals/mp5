@@ -8,8 +8,6 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import ca.ece.ubc.cpen221.mp5.query.QueryFactory;
 
@@ -33,11 +31,10 @@ public class RestaurantDBServer {
     // Rep invariant: serverSocket != null
 
     /**
-     * Constructor, make a server that listens for connection on port.
+     * Constructor that makes a server that listens for connection on port.
      * 
      * @param port
      *            the port number of the server, requires 0 <= port <= 65535
-     * 
      * @param restaurantDetails
      *            JSON Format of the restaurant details
      * @param userReviews
@@ -89,8 +86,8 @@ public class RestaurantDBServer {
                         try {
                             return review.representationInJSON();
                         } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
+                            e.printStackTrace(); //TODO: remove 
+                            return ReturnMessages.malformedExpressionError;
                         }
                     }
                 }
@@ -115,13 +112,13 @@ public class RestaurantDBServer {
                 try {
                     return restaurant.representationInJSON();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    e.printStackTrace(); //TODO: remove 
+                    return ReturnMessages.malformedExpressionError;
                 }
             }
         }
 
-        return "cannot get restaurant";
+        return ReturnMessages.notFoundError;
     }
 
     /**
@@ -130,31 +127,29 @@ public class RestaurantDBServer {
      * suitable checking (for example: does another restaurant with the same
      * name exist at the same location
      * 
-     * @param json
-     *            restaurant information encoded in json string
+     * @param json restaurant information encoded in json string
+     * @return operation completion status
      */
     public String addRestaurant(String json) {
-
         return db.addRestaurant(json);
     }
 
     /**
      * 
-     * @param json
-     *            user information encoded as json string
+     * @param json user information encoded as json string
+     * @return operation completion status
+     * 
      */
     public String addUser(String json) {
-
         return db.addUser(json);
     }
 
     /**
      * 
-     * @param json
-     *            review information encoded as json string
+     * @param json review information encoded as json string
+     * @return operation completion status
      */
     public String addReview(String json) {
-
         return db.addReview(json);
     }
 
@@ -183,9 +178,12 @@ public class RestaurantDBServer {
         try {
             // each request is a single line containing a number
             for (String line = in.readLine(); line != null; line = in.readLine()) {
-                System.err.println("request: " + line);
+
+                String result = callFunctionFromClientRequest(line);
                 
-                out.println(callFunctionFromClientRequest(line) + "\n");
+                System.err.println("Request: " + line + "\n\tResult: " + result);
+                
+                out.println(result + "\n");
 
                 // flushing buffer so the reply is sent
                 out.flush();
@@ -207,7 +205,9 @@ public class RestaurantDBServer {
     public String query(String queryString) {
 
         try {
-
+            
+            if (queryString.isEmpty()) return ReturnMessages.emptyQueryError;
+            
             Set<Restaurant> matches = QueryFactory.parse(queryString).result(db);
             String output = "";
             for (Restaurant match : matches) {
@@ -217,10 +217,9 @@ public class RestaurantDBServer {
             return output;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); //TODO: remove 
+            return ReturnMessages.malformedExpressionError;
         }
-
-        return ReturnMessages.noMatches;
     }
 
     /**
@@ -276,10 +275,10 @@ public class RestaurantDBServer {
 
                 String queryString = query.toString();
                 
-                if (clientString.length() < queryString.length()) break; //protection for searchQueries
-                
+                //protection for searchQueries
+                if (clientString.length() < queryString.length()) break; 
                 String substring = clientString.substring(0, queryString.length());
-
+                
                 if (queryString.equals(substring)) {
 
                     int firstQuoteIndex = clientString.indexOf("\"") + 1;

@@ -2,16 +2,12 @@ package ca.ece.ubc.cpen221.mp5;
 
 import static org.junit.Assert.*;
 
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import org.junit.Test;
 
 import ca.ece.ubc.cpen221.mp5.statlearning.Algorithms;
-import ca.ece.ubc.cpen221.mp5.statlearning.Coordinate;
 
 public class RestaurantDBTest {
 

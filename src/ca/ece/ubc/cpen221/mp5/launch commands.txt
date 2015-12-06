@@ -1,0 +1,5 @@
+Antlr launch command: 
+	java -jar antlr-4.4-complete.jar Query.g4
+
+Java server .jar:
+	java -jar mp5.jar "4949" "restaurants.json" "reviews.json" "users.json"

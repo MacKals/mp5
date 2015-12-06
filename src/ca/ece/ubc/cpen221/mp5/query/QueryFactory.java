@@ -5,7 +5,7 @@ import java.util.Stack;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RuleContext;
+//import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -38,7 +38,7 @@ public class QueryFactory {
 //        System.err.println(tree.toStringTree(parser));
         
         // debugging option #2: show the tree in a window
-        ((RuleContext) tree).inspect(parser);
+//        ((RuleContext) tree).inspect(parser);
 
         // debugging option #3: walk the tree with a listener
 //         new ParseTreeWalker().walk(new QueryListener_PrintEverything(), tree);

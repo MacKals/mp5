@@ -14,7 +14,7 @@ public class RestaurantDBTest {
     @Test
     public void test() throws IOException {
         
-        RestaurantDB db = new RestaurantDB("restaurants.json", "reviews.json", "users.json");
+        RestaurantDB db = new RestaurantDB("data/restaurants.json", "data/reviews.json", "data/users.json");
         db.getRestaurantList();
         System.out.print(db.toString());
         

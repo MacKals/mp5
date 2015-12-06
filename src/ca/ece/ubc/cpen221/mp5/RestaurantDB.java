@@ -102,7 +102,7 @@ public class RestaurantDB {
      */
     public ArrayList<Restaurant> getRestaurantList() {
         synchronized (restaurants) {
-            return this.restaurants;
+            return restaurants;
         }
     }
 
@@ -116,7 +116,7 @@ public class RestaurantDB {
      */
     public ArrayList<Review> getReviewList() {
         synchronized (reviews) {
-            return this.reviews;
+            return reviews;
         }
     }
 
@@ -130,7 +130,7 @@ public class RestaurantDB {
      */
     public ArrayList<User> getUserList() {
         synchronized (users) {
-            return this.users;
+            return users;
         }
     }
 
@@ -146,7 +146,6 @@ public class RestaurantDB {
         synchronized (categories) {
             return categories;
         }
-        // return (ArrayList<String>) Collections.unmodifiableList(categories); //TODO: Do we want to do this with all returns? Immutable wrapper?
     }
 
     public enum FileKind {
@@ -167,7 +166,7 @@ public class RestaurantDB {
      *            The type of file we wish to add to our database
      * @return true if the objects were successfully added from the file.
      */
-    @SuppressWarnings("resource")
+    @SuppressWarnings("resource") // it is handled as pointer fileEntries is local to method
     private boolean addFromFile(String filename, FileKind fileKind) {
 
         try {
@@ -191,13 +190,12 @@ public class RestaurantDB {
         }
 
         return true;
-
     }
 
     /**
-     * 
-     * @param inputCategories
-     * @return
+     * Maps categories to corresponding doubles for regression
+     * @param inputCategories categories as strings
+     * @return double representation on input-list
      */
     public ArrayList<Double> mapCategories(ArrayList<String> inputCategories) {
         ArrayList<Double> categoriesDoubles = new ArrayList<Double>();
@@ -207,7 +205,6 @@ public class RestaurantDB {
         }
 
         return categoriesDoubles;
-
     }
 
     /**
@@ -236,6 +233,10 @@ public class RestaurantDB {
             // accessing restaurants, lock on it:
             synchronized (restaurants) {
 
+                // Check for valid restaurant
+                if (newRestaurant.getBusinessID().isEmpty()) return ReturnMessages.malformedExpressionError;
+                if (newRestaurant.getName().isEmpty()) return ReturnMessages.malformedExpressionError;
+                
                 // Check for duplication
                 if (initComplete) {
                     for (Restaurant restaurantInstance : restaurants) {
@@ -293,6 +294,9 @@ public class RestaurantDB {
 
             //accessing users, lock on it
             synchronized(users) {
+
+                // Check for valid user
+                if (newUser.getUserID().isEmpty()) return ReturnMessages.malformedExpressionError;
                 
                 // Check weather exists already
                 if (initComplete) {
@@ -305,7 +309,7 @@ public class RestaurantDB {
                         }
                     }
                 }
-
+                
                 users.add(newUser);
                 
             }
@@ -343,7 +347,12 @@ public class RestaurantDB {
 
             synchronized(reviews) {
                 
-             // Check for duplication
+
+                // Check for valid review
+                if (newReview.getBusinessID().isEmpty()) return ReturnMessages.malformedExpressionError;
+                
+                
+                // Check for duplication
                 if (initComplete) {
                     for (Review reviewInstance : reviews) {
                         if (reviewInstance.reviewID == newReview.reviewID) {

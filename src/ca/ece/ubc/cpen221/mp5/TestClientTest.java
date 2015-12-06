@@ -32,7 +32,7 @@ public class TestClientTest {
             // send the requests to find the first N query numbers
             for (String query : queries) {
                 client.sendRequest(query);
-                System.out.println("Query sent: " + query);
+//                System.out.println("Query sent: " + query);
             }
 
             // collect the replies

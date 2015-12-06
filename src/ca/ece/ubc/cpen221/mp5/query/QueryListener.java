@@ -11,46 +11,6 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface QueryListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link QueryParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpression(@NotNull QueryParser.ExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link QueryParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpression(@NotNull QueryParser.ExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link QueryParser#string}.
-	 * @param ctx the parse tree
-	 */
-	void enterString(@NotNull QueryParser.StringContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link QueryParser#string}.
-	 * @param ctx the parse tree
-	 */
-	void exitString(@NotNull QueryParser.StringContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link QueryParser#rating}.
-	 * @param ctx the parse tree
-	 */
-	void enterRating(@NotNull QueryParser.RatingContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link QueryParser#rating}.
-	 * @param ctx the parse tree
-	 */
-	void exitRating(@NotNull QueryParser.RatingContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link QueryParser#range}.
-	 * @param ctx the parse tree
-	 */
-	void enterRange(@NotNull QueryParser.RangeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link QueryParser#range}.
-	 * @param ctx the parse tree
-	 */
-	void exitRange(@NotNull QueryParser.RangeContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link QueryParser#orExpression}.
 	 * @param ctx the parse tree
 	 */
@@ -81,6 +41,16 @@ public interface QueryListener extends ParseTreeListener {
 	 */
 	void exitFile(@NotNull QueryParser.FileContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link QueryParser#string}.
+	 * @param ctx the parse tree
+	 */
+	void enterString(@NotNull QueryParser.StringContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link QueryParser#string}.
+	 * @param ctx the parse tree
+	 */
+	void exitString(@NotNull QueryParser.StringContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link QueryParser#price}.
 	 * @param ctx the parse tree
 	 */
@@ -91,16 +61,6 @@ public interface QueryListener extends ParseTreeListener {
 	 */
 	void exitPrice(@NotNull QueryParser.PriceContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link QueryParser#logicExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterLogicExpression(@NotNull QueryParser.LogicExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link QueryParser#logicExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitLogicExpression(@NotNull QueryParser.LogicExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link QueryParser#name}.
 	 * @param ctx the parse tree
 	 */
@@ -110,6 +70,26 @@ public interface QueryListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitName(@NotNull QueryParser.NameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link QueryParser#rating}.
+	 * @param ctx the parse tree
+	 */
+	void enterRating(@NotNull QueryParser.RatingContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link QueryParser#rating}.
+	 * @param ctx the parse tree
+	 */
+	void exitRating(@NotNull QueryParser.RatingContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link QueryParser#range}.
+	 * @param ctx the parse tree
+	 */
+	void enterRange(@NotNull QueryParser.RangeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link QueryParser#range}.
+	 * @param ctx the parse tree
+	 */
+	void exitRange(@NotNull QueryParser.RangeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link QueryParser#location}.
 	 * @param ctx the parse tree

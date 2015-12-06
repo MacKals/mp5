@@ -41,21 +41,18 @@ RATING:		'rating';
 PRICE: 		'price';
 
 INT:		[1-5] ;
-STRING: 	~[<>]+ ;
+STRING: 	(('A'..'Z')|('a'..'z') | ' ')+ ;
 
 WHITESPACE: [ \t\r\n]+ -> skip ;
 
 
-file: expression EOF;
+file: orExpression EOF;
 
-expression:   		logicExpression | atom ;
+orExpression:  		andExpression (OR andExpression)*;
 
-logicExpression: 	(LP expression RP) | andExpression | orExpression ;
+andExpression: 		atom (AND atom)*;
 
-andExpression: 		expression AND expression;
-orExpression:  		expression OR expression;
-
-atom: 		location | category | name | rating | price;
+atom: 		location | category | name | rating | price | (LP orExpression RP);
 
 location: 	IN 			LP string RP;
 category: 	CATEGORY 	LP string RP;

@@ -14,5 +14,4 @@ public interface Query {
     public Set<Restaurant> result(RestaurantDB db);
     
     public String stringRepresentation();
-    
 }

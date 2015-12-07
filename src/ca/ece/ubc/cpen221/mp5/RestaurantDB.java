@@ -8,7 +8,6 @@ import org.json.simple.parser.JSONParser;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 
 /**
@@ -101,8 +100,9 @@ public class RestaurantDB {
      */
     public synchronized ArrayList<Restaurant> getRestaurantList() {
         ArrayList<Restaurant> returnList = new ArrayList<>();
+        
         synchronized (restaurants) {
-            Collections.copy(returnList, restaurants);
+            returnList.addAll(restaurants);
         }
         return returnList;
     }
@@ -118,7 +118,7 @@ public class RestaurantDB {
     public synchronized ArrayList<Review> getReviewList() {
         ArrayList<Review> returnList = new ArrayList<>();
         synchronized (reviews) {
-            Collections.copy(returnList, reviews);
+            returnList.addAll(reviews);
         }
         return returnList;
     }
@@ -134,7 +134,7 @@ public class RestaurantDB {
     public synchronized ArrayList<User> getUserList() {
         ArrayList<User> returnList = new ArrayList<>();
         synchronized (users) {
-            Collections.copy(returnList, users);
+            returnList.addAll(users);
         }
         return returnList;
     }
@@ -151,7 +151,7 @@ public class RestaurantDB {
 
         ArrayList<String> returnList = new ArrayList<>();
         synchronized (categories) {
-            Collections.copy(returnList, categories);
+            returnList.addAll(categories);
         }
         return returnList;
     }
@@ -318,9 +318,6 @@ public class RestaurantDB {
 
                     for (User userInstance : users) {
                         if (userInstance.getUserID() == newUser.getUserID()) {
-                            // TODO:Search for duplication based on user id only
-                            // -
-                            // more needed?
                             return ReturnMessages.alreadyExistsError;
                         }
                     }

@@ -2,7 +2,6 @@ package ca.ece.ubc.cpen221.mp5.statlearning;
 
 import static org.junit.Assert.*;
 
-
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -20,7 +19,7 @@ public class AlgorithmsTest {
     @Test
     public void testKMeans() {
 
-        RestaurantDB db = new RestaurantDB("restaurantsTest.json", "reviews.json", "users.json");
+        RestaurantDB db = new RestaurantDB("data/restaurantsTest.json", "data/reviews.json", "data/users.json");
         boolean found = true;
 
         // eight restaurants:
@@ -85,7 +84,7 @@ public class AlgorithmsTest {
         // compute the centroid of 3 points
 
         ArrayList<Restaurant> coordList = new ArrayList<>();
-        RestaurantDB db = new RestaurantDB("restaurants.json", "reviews.json", "users.json");
+        RestaurantDB db = new RestaurantDB("data/restaurants.json", "data/reviews.json", "data/users.json");
 
         for (int i = 0; i < 3; i++) {
             coordList.add(db.getRestaurantList().get(i));
@@ -105,12 +104,12 @@ public class AlgorithmsTest {
     @Test
     public void testGetPredictor() throws Exception {
 
-        RestaurantDB db = new RestaurantDB("restaurants.json", "reviews.json", "users.json");
+        RestaurantDB db = new RestaurantDB("data/restaurants.json", "data/reviews.json", "data/users.json");
         MP5Function price = new RestaurantPriceScale();
-        MP5Function latitude = new RestaurantLatitude();
-        MP5Function returnedFunction1 = Algorithms.getPredictor(db.getUserList().get(8), db, price);
+//        MP5Function latitude = new RestaurantLatitude();
+//        MP5Function returnedFunction1 = Algorithms.getPredictor(db.getUserList().get(8), db, price);
 
-        double prediction = returnedFunction1.f(db.getRestaurantList().get(12), db);
+//        double prediction = returnedFunction1.f(db.getRestaurantList().get(12), db);
 
         // System.out.println("I predict the user will give this restaurant a
         // rating of " + prediction + " stars");
@@ -121,7 +120,7 @@ public class AlgorithmsTest {
         // gave it 5 stars.
 
         MP5Function returnedFunctionCat = Algorithms.getPredictor(db.getUserList().get(1), db, price);
-        MP5Function returnedFunctionCat2 = Algorithms.getPredictor(db.getUserList().get(1), db, price);
+//        MP5Function returnedFunctionCat2 = Algorithms.getPredictor(db.getUserList().get(1), db, price);
 
         assert(returnedFunctionCat.f(db.getRestaurantList().get(10), db) == 5.0);
         assert(returnedFunctionCat.f(db.getRestaurantList().get(15), db) == 5.0);
@@ -130,7 +129,7 @@ public class AlgorithmsTest {
     @Test
     public void testGetBestPredictor() throws Exception {
 
-        RestaurantDB db = new RestaurantDB("restaurants.json", "reviews.json", "users.json");
+        RestaurantDB db = new RestaurantDB("data/restaurants.json", "data/reviews.json", "data/users.json");
 
         MP5Function func1 = new RestaurantPriceScale();
         MP5Function func2 = new RestaurantLatitude();
@@ -144,7 +143,7 @@ public class AlgorithmsTest {
         funcList.add(func3);
         funcList.add(func4);
         funcList.add(func5);
-
+        
         MP5Function bestFunc = Algorithms.getBestPredictor(db.getUserList().get(8), db, funcList);
 
         ArrayList<Double> coefficients1 = Algorithms.computeRegressionCoefficients(func1, db.getUserList().get(8), db);
@@ -168,7 +167,7 @@ public class AlgorithmsTest {
     @Test
     public void writeTheVoronoiVisualization() throws IOException {
 
-        RestaurantDB db = new RestaurantDB("restaurants.json", "reviews.json", "users.json");
+        RestaurantDB db = new RestaurantDB("data/restaurants.json", "data/reviews.json", "data/users.json");
         
 
         String testString = Algorithms.convertClustersToJSON(Algorithms.kMeansClustering(3, db));

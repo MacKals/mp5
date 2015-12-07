@@ -11,7 +11,6 @@ import java.util.Set;
 
 import ca.ece.ubc.cpen221.mp5.query.QueryFactory;
 
-// TODO: Implement a server that will instantiate a database, 
 // process queries concurrently, etc.
 
 /**
@@ -86,7 +85,6 @@ public class RestaurantDBServer {
                         try {
                             return review.representationInJSON();
                         } catch (IOException e) {
-                            e.printStackTrace(); //TODO: remove 
                             return ReturnMessages.malformedExpressionError;
                         }
                     }
@@ -112,7 +110,6 @@ public class RestaurantDBServer {
                 try {
                     return restaurant.representationInJSON();
                 } catch (IOException e) {
-                    e.printStackTrace(); //TODO: remove 
                     return ReturnMessages.malformedExpressionError;
                 }
             }
@@ -217,7 +214,6 @@ public class RestaurantDBServer {
             return output;
 
         } catch (IOException e) {
-            e.printStackTrace(); //TODO: remove 
             return ReturnMessages.malformedExpressionError;
         }
     }

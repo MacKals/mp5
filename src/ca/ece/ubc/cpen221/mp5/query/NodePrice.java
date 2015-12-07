@@ -26,7 +26,7 @@ public class NodePrice implements Query {
                 if (!(object instanceof Restaurant)) throw new RuntimeException();
                 Restaurant restaurant = (Restaurant) object;
                 
-                if (lowerPrice <= restaurant.getPrice() && restaurant.getPrice() <= higherPrice) { //TODO: check if it is inclusinve
+                if (lowerPrice <= restaurant.getPrice() && restaurant.getPrice() <= higherPrice) {
                     result.add(restaurant);
                 }
             }
@@ -38,5 +38,4 @@ public class NodePrice implements Query {
     public String stringRepresentation() {
         return "price: " + lowerPrice + "..." + higherPrice;
     }
-
 }

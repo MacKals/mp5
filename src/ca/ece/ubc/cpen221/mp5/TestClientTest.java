@@ -24,6 +24,14 @@ public class TestClientTest {
 
             // add to list
             queries.add("randomReview(\"La Val's Pizza\")");
+            queries.add("randomReview(\"La Val's Pizza\")");
+            queries.add("in(\"Telegraph Ave\") && (category(\"Chinese\") || category(\"Italian\")) && price(1..2)");
+            queries.add("getRestaurant(\"4D7IdtyRjH8qxcsHaz1-GA\")");
+            queries.add("addRestaurant(\"\")");
+            queries.add("in(\"Telegraph Ave\") && (category(\"Chinese\") || category(\"Italian\")) && price(1..2)");
+            
+            queries.add("randomReview(\"La Val's Pizza\")");
+            queries.add("randomReview(\"La Val's Pizza\")");
             queries.add("in(\"Telegraph Ave\") && (category(\"Chinese\") || category(\"Italian\")) && price(1..2)");
             queries.add("getRestaurant(\"4D7IdtyRjH8qxcsHaz1-GA\")");
             queries.add("addRestaurant(\"\")");
@@ -44,7 +52,5 @@ public class TestClientTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
-
 }

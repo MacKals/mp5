@@ -86,7 +86,7 @@ public class RestaurantDB {
                 }
             }
         }
-
+        
         initComplete = true;
     }
 
@@ -195,7 +195,7 @@ public class RestaurantDB {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            return false;
         }
 
         return true;
@@ -275,7 +275,6 @@ public class RestaurantDB {
             }
 
         } catch (ParseException e) {
-            e.printStackTrace();
             return ReturnMessages.malformedExpressionError;
         }
 
@@ -328,7 +327,6 @@ public class RestaurantDB {
             }
 
         } catch (ParseException e) {
-            e.printStackTrace();
             return ReturnMessages.malformedExpressionError;
         }
 
@@ -378,7 +376,6 @@ public class RestaurantDB {
             }
 
         } catch (ParseException e) {
-            e.printStackTrace();
             return ReturnMessages.malformedExpressionError;
         }
 

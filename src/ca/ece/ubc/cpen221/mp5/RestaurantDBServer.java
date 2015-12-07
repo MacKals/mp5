@@ -25,7 +25,6 @@ public class RestaurantDBServer {
     private ServerSocket serverSocket;
 
     private RestaurantDB db;
-    // private ConcurrentLinkedQueue<String> queryQueue;
 
     // Rep invariant: serverSocket != null
 
@@ -180,7 +179,7 @@ public class RestaurantDBServer {
                 
                 System.err.println("Request: " + line + "\n\tResult: " + result);
                 
-                out.println(result + "\n");
+                out.println(result);
 
                 // flushing buffer so the reply is sent
                 out.flush();
@@ -206,10 +205,13 @@ public class RestaurantDBServer {
             if (queryString.isEmpty()) return ReturnMessages.emptyQueryError;
             
             Set<Restaurant> matches = QueryFactory.parse(queryString).result(db);
+            
             String output = "";
             for (Restaurant match : matches) {
                 output += match.representationInJSON();
             }
+            
+            if (output.isEmpty()) return ReturnMessages.notFoundError;
             
             return output;
 
